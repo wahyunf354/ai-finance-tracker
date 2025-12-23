@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const text = formData.get("text") as string;
     const file = formData.get("file") as File | null;
+    const lang = (formData.get("lang") as string) || "id";
 
     if (!text && !file) {
       return NextResponse.json({ error: "No input provided" }, { status: 400 });
@@ -145,31 +146,58 @@ export async function POST(req: NextRequest) {
       source = file.type.startsWith("image/") ? "image" : "audio";
     }
 
-    // Check Premium Limits for Receipt Scanning
+    // Check Premium Limits for Receipt Scanning and Voice Input
     const { data: userData } = await supabase
       .from("users")
       .select("is_premium")
       .eq("email", session.user.email)
       .single();
 
-    if (!userData?.is_premium && source === "image") {
+    if (!userData?.is_premium) {
       const today = new Date().toISOString().split("T")[0];
-      const { count } = await supabase
-        .from("transactions")
-        .select("*", { count: "exact", head: true })
-        .eq("user_email", session.user.email)
-        .eq("source", "image")
-        .eq("date", today);
 
-      if (count !== null && count >= 3) {
-        return NextResponse.json(
-          {
-            error:
-              "Daily receipt scanning limit reached (3/3). Upgrade to Premium for unlimited scans!",
-            isLimitReached: true,
-          },
-          { status: 403 }
-        );
+      if (source === "image") {
+        const { count } = await supabase
+          .from("transactions")
+          .select("*", { count: "exact", head: true })
+          .eq("user_email", session.user.email)
+          .eq("source", "image")
+          .eq("date", today);
+
+        if (count !== null && count >= 3) {
+          const errorMsg =
+            lang === "id"
+              ? "Batas harian scan struk telah tercapai (3/3). Upgrade ke Premium untuk scan tanpa batas!"
+              : "Daily receipt scanning limit reached (3/3). Upgrade to Premium for unlimited scans!";
+          return NextResponse.json(
+            {
+              error: errorMsg,
+              isLimitReached: true,
+            },
+            { status: 403 }
+          );
+        }
+      } else if (source === "audio") {
+        const { count } = await supabase
+          .from("transactions")
+          .select("*", { count: "exact", head: true })
+          .eq("user_email", session.user.email)
+          .eq("source", "audio")
+          .eq("date", today);
+
+        if (count !== null && count >= 10) {
+          const errorMsg =
+            lang === "id"
+              ? "Batas harian input suara telah tercapai (10/10). Upgrade ke Premium untuk input suara tanpa batas!"
+              : "Daily voice input limit reached (10/10). Upgrade to Premium for unlimited voice recording!";
+          return NextResponse.json(
+            {
+              error: errorMsg,
+              isLimitReached: true,
+            },
+            { status: 403 }
+          );
+        }
       }
     }
 

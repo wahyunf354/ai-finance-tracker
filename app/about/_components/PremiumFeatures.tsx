@@ -26,7 +26,9 @@ export function PremiumFeatures() {
               <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
             </div>
             <div className="text-sm">
-              <span className="font-bold">Unlimited Receipt Scanning:</span>{" "}
+              <span className="font-bold">
+                {t.about.premium_receipt_title}:
+              </span>{" "}
               {t.about.premium_receipt}
             </div>
           </li>
@@ -35,7 +37,16 @@ export function PremiumFeatures() {
               <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
             </div>
             <div className="text-sm">
-              <span className="font-bold">Professional PDF Reports:</span>{" "}
+              <span className="font-bold">{t.about.premium_voice_title}:</span>{" "}
+              {t.about.premium_voice}
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+            </div>
+            <div className="text-sm">
+              <span className="font-bold">{t.about.premium_pdf_title}:</span>{" "}
               {t.about.premium_pdf}
             </div>
           </li>
@@ -44,7 +55,9 @@ export function PremiumFeatures() {
               <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
             </div>
             <div className="text-sm">
-              <span className="font-bold">Pro Financial Insights:</span>{" "}
+              <span className="font-bold">
+                {t.about.premium_insights_title}:
+              </span>{" "}
               {t.about.premium_insights}
             </div>
           </li>

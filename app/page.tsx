@@ -21,7 +21,7 @@ type Message = {
 };
 
 export default function ChatPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -139,6 +139,7 @@ export default function ChatPage() {
 
     try {
       const formData = new FormData();
+      formData.append("lang", language);
       if (audioFile) {
         formData.append("file", audioFile);
       } else {

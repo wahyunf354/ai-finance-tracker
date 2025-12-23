@@ -175,5 +175,14 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    touch-action: pan-x pan-y; /* Prevent double-tap zoom */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none; /* Disable default browser menu on long press */
+  }
+
+  /* Prevent text selection on UI elements for a native feel */
+  .no-select {
+    user-select: none;
+    -webkit-user-select: none;
   }
 }
