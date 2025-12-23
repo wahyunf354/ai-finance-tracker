@@ -1,13 +1,12 @@
-export type TransactionType = "pengeluaran" | "pemasukan";
-
-export interface Transaction {
-  id: string; // generated client-side or by DB
-  tanggal: string; // YYYY-MM-DD
-  jenis: TransactionType;
-  kategori: string;
-  nominal: number;
-  catatan: string;
-}
+export type Transaction = {
+  id: string;
+  created_at: string;
+  date: string;
+  description: string;
+  amount: number;
+  category: string;
+  type: "income" | "expense";
+};
 
 export interface ProcessingResponse {
   success: boolean;
