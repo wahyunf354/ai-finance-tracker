@@ -1,0 +1,75 @@
+{
+  "common": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "about": "About",
+    "logout": "Logout",
+    "premium": "Premium",
+    "income": "Income",
+    "expense": "Expense",
+    "balance": "Net Balance",
+    "loading": "Loading...",
+    "error": "Something went wrong"
+  },
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "about": "About",
+    "logout": "Logout"
+  },
+  "header": {
+    "title": "Finflow"
+  },
+  "chat": {
+    "greeting": "Hello! I am your Finflow Assistant. You can tell me about your expenses or income via text, receipt image, or voice.",
+    "placeholder": "Type a message...",
+    "listening": "Listening...",
+    "processing": "Processing...",
+    "voice_note": "Voice Note",
+    "receipt_image": "Receipt Image"
+  },
+  "about": {
+    "title": "About & Feedback",
+    "version": "Version 1.0.0 (Beta)",
+    "description": "Welcome to the future of personal finance tracking. This application utilizes advanced Artificial Intelligence (Google Gemini) to simplify how you record and analyze your daily transactions.",
+    "voice_text_title": "Voice & Text",
+    "voice_text_desc": "Simply speak or type your expenses naturally. \"Bought coffee for 25k\" is all you need to say.",
+    "smart_cat_title": "Smart Categorization",
+    "smart_cat_desc": "The AI automatically understands context and categorizes your transactions instantly.",
+    "support_title": "Support Development",
+    "support_desc": "Enjoying Finflow? Your support helps me keep the AI running and develop new features.",
+    "support_button": "Support via Saweria",
+    "premium_title": "Finflow Premium",
+    "premium_desc": "Elevate your financial management with our pro tools.",
+    "premium_receipt": "Scan as many receipts as you want without daily limits (Free users limited to 3 scans/day).",
+    "premium_pdf": "Download beautiful monthly summaries with visual summaries and category charts.",
+    "premium_insights": "Advanced AI analysis to help you balance income and expenses.",
+    "feedback_title": "Send Feedback",
+    "feedback_desc": "We value your input! Tell us what you like or what we can improve.",
+    "rating": "Rating",
+    "message": "Message",
+    "message_placeholder": "Tell us your thoughts...",
+    "submit": "Submit Feedback",
+    "sending": "Sending...",
+    "success_thanks": "Thank You!",
+    "success_msg": "Your feedback has been sent successfully.",
+    "send_another": "Send another"
+  },
+  "history": {
+    "title": "Transactions",
+    "search_placeholder": "Search transactions...",
+    "filter_all": "All",
+    "filter_income": "Income",
+    "filter_expense": "Expense",
+    "export_excel": "Excel",
+    "export_pdf": "PDF Report",
+    "no_transactions": "No transactions found",
+    "date": "Date",
+    "description": "Description",
+    "category": "Category",
+    "amount": "Amount",
+    "actions": "Actions"
+  }
+}

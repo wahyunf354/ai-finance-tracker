@@ -1,0 +1,75 @@
+{
+  "common": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "history": "Riwayat",
+    "about": "Tentang",
+    "logout": "Keluar",
+    "premium": "Premium",
+    "income": "Pemasukan",
+    "expense": "Pengeluaran",
+    "balance": "Saldo Neto",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan"
+  },
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "history": "Riwayat",
+    "about": "Tentang",
+    "logout": "Keluar"
+  },
+  "header": {
+    "title": "Finflow"
+  },
+  "chat": {
+    "greeting": "Halo! Saya Asisten Finflow Anda. Anda bisa memberitahu saya tentang pengeluaran atau pemasukan Anda melalui teks, gambar struk, atau suara.",
+    "placeholder": "Ketik pesan...",
+    "listening": "Mendengarkan...",
+    "processing": "Memproses...",
+    "voice_note": "Catatan Suara",
+    "receipt_image": "Gambar Struk"
+  },
+  "about": {
+    "title": "Tentang & Feedback",
+    "version": "Versi 1.0.0 (Beta)",
+    "description": "Selamat datang di masa depan pelacakan keuangan pribadi. Aplikasi ini menggunakan Kecerdasan Buatan (Google Gemini) yang canggih untuk menyederhanakan cara Anda mencatat dan menganalisis transaksi harian Anda.",
+    "voice_text_title": "Suara & Teks",
+    "voice_text_desc": "Cukup bicara atau ketik pengeluaran Anda secara alami. \"Beli kopi 25rb\" adalah semua yang perlu Anda katakan.",
+    "smart_cat_title": "Kategorisasi Pintar",
+    "smart_cat_desc": "AI secara otomatis memahami konteks dan mengategorikan transaksi Anda secara instan.",
+    "support_title": "Dukung Pengembangan",
+    "support_desc": "Menikmati Finflow? Dukungan Anda membantu saya menjaga AI tetap berjalan dan mengembangkan fitur-fitur baru.",
+    "support_button": "Dukung via Saweria",
+    "premium_title": "Finflow Premium",
+    "premium_desc": "Tingkatkan pengelolaan keuangan Anda dengan fitur Pro.",
+    "premium_receipt": "Scan struk belanja sepuasnya tanpa batas harian (User gratis dibatasi 3 scan/hari).",
+    "premium_pdf": "Download laporan bulanan yang rapi dengan ringkasan visual dan grafik kategori.",
+    "premium_insights": "Analisis AI mendalam untuk membantu Anda menyeimbangkan pemasukan dan pengeluaran.",
+    "feedback_title": "Kirim Feedback",
+    "feedback_desc": "Kami menghargai masukan Anda! Beritahu kami apa yang Anda suka atau apa yang bisa kami tingkatkan.",
+    "rating": "Rating",
+    "message": "Pesan",
+    "message_placeholder": "Ceritakan pemikiran Anda...",
+    "submit": "Kirim Feedback",
+    "sending": "Mengirim...",
+    "success_thanks": "Terima Kasih!",
+    "success_msg": "Feedback Anda telah berhasil dikirim.",
+    "send_another": "Kirim lagi"
+  },
+  "history": {
+    "title": "Transaksi",
+    "search_placeholder": "Cari transaksi...",
+    "filter_all": "Semua",
+    "filter_income": "Masuk",
+    "filter_expense": "Keluar",
+    "export_excel": "Excel",
+    "export_pdf": "Laporan PDF",
+    "no_transactions": "Tidak ada transaksi ditemukan",
+    "date": "Tanggal",
+    "description": "Deskripsi",
+    "category": "Kategori",
+    "amount": "Jumlah",
+    "actions": "Aksi"
+  }
+}

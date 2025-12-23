@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Message = {
   id: string;
@@ -20,15 +21,37 @@ type Message = {
 };
 
 export default function ChatPage() {
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "assistant",
-      content:
-        "Hello! I am your Finflow Assistant. You can tell me about your expenses or income via text or voice.",
+      content: t.chat.greeting,
       timestamp: new Date(),
     },
   ]);
+
+  // Update greeting when language changes (only for the initial message if it's the only one)
+  useEffect(() => {
+    setMessages((prev) => {
+      if (
+        prev.length === 1 &&
+        prev[0].role === "assistant" &&
+        prev[0].id === "1"
+      ) {
+        return [
+          {
+            id: "1",
+            role: "assistant",
+            content: t.chat.greeting,
+            timestamp: prev[0].timestamp,
+          },
+        ];
+      }
+      return prev;
+    });
+  }, [t.chat.greeting]);
+
   const [inputObj, setInputObj] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,8 +126,8 @@ export default function ChatPage() {
       role: "user",
       content: audioFile
         ? isImage
-          ? "🖼️ Receipt Image"
-          : "🎤 Voice Note"
+          ? `🖼️ ${t.chat.receipt_image}`
+          : `🎤 ${t.chat.voice_note}`
         : inputObj,
       type: audioFile ? (isImage ? "text" : "audio") : "text",
       timestamp: new Date(),
@@ -159,7 +182,7 @@ export default function ChatPage() {
         {
           id: Date.now().toString(),
           role: "assistant",
-          content: `Sorry, something went wrong: ${errorMessage}`,
+          content: `${t.common.error}: ${errorMessage}`,
           timestamp: new Date(),
         },
       ]);
@@ -240,7 +263,7 @@ export default function ChatPage() {
                 </Avatar>
                 <div className="bg-muted text-muted-foreground rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
                   <Loader2 className="h-3 w-3 animate-spin" />
-                  <span className="text-xs">Processing...</span>
+                  <span className="text-xs">{t.chat.processing}</span>
                 </div>
               </motion.div>
             )}
@@ -258,7 +281,7 @@ export default function ChatPage() {
           <Input
             value={inputObj}
             onChange={(e) => setInputObj(e.target.value)}
-            placeholder={isRecording ? "Listening..." : "Type a message..."}
+            placeholder={isRecording ? t.chat.listening : t.chat.placeholder}
             disabled={isRecording || isLoading}
             className="flex-1 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-3 h-auto text-base placeholder:text-muted-foreground/50 shadow-none min-h-[48px]"
           />

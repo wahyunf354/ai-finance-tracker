@@ -1,5 +1,6 @@
 import { Download, FileText, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface TransactionHeaderProps {
   onExportExcel: () => void;
@@ -12,9 +13,10 @@ export function TransactionHeader({
   onExportPDF,
   isPremium,
 }: TransactionHeaderProps) {
+  const { t } = useLanguage();
   return (
     <div className="flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-foreground">Transactions</h1>
+      <h1 className="text-2xl font-bold text-foreground">{t.history.title}</h1>
       <div className="flex gap-2">
         <Button
           onClick={onExportExcel}
@@ -23,7 +25,7 @@ export function TransactionHeader({
           className="gap-2"
         >
           <Download className="h-4 w-4" />
-          <span className="hidden sm:inline">Excel</span>
+          <span className="hidden sm:inline">{t.history.export_excel}</span>
           <span className="sm:hidden">XLS</span>
         </Button>
         <Button
@@ -37,7 +39,7 @@ export function TransactionHeader({
           ) : (
             <Crown className="h-4 w-4 text-yellow-500" />
           )}
-          <span className="hidden sm:inline">PDF Report</span>
+          <span className="hidden sm:inline">{t.history.export_pdf}</span>
           <span className="sm:hidden">PDF</span>
         </Button>
       </div>

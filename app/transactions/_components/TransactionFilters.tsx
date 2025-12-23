@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface TransactionFiltersProps {
   filterType: "all" | "income" | "expense";
@@ -24,6 +25,7 @@ export function TransactionFilters({
   setDateRange,
   categories,
 }: TransactionFiltersProps) {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const activeFiltersCount = [
@@ -36,6 +38,13 @@ export function TransactionFilters({
     setFilterType("all");
     setFilterCategory("all");
     setDateRange({ from: "", to: "" });
+  };
+
+  const getTypeLabel = (type: string) => {
+    if (type === "all") return t.history.filter_all;
+    if (type === "income") return t.history.filter_income;
+    if (type === "expense") return t.history.filter_expense;
+    return type;
   };
 
   return (
@@ -68,7 +77,7 @@ export function TransactionFilters({
               onClick={resetFilters}
               className="h-9 px-3 text-xs text-muted-foreground hover:text-foreground gap-1"
             >
-              <X className="h-3 w-3" />
+              <X className="h-3.5 w-3.5" />
               Reset
             </Button>
           )}
@@ -100,7 +109,7 @@ export function TransactionFilters({
                             : "bg-muted/50 border-transparent hover:bg-muted text-muted-foreground"
                         )}
                       >
-                        {type}
+                        {getTypeLabel(type)}
                       </button>
                     ))}
                   </div>
@@ -109,7 +118,7 @@ export function TransactionFilters({
                 {/* Category Filter */}
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Category
+                    {t.history.category}
                   </label>
                   <select
                     value={filterCategory}
@@ -118,7 +127,7 @@ export function TransactionFilters({
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
-                        {cat === "all" ? "All Categories" : cat}
+                        {cat === "all" ? t.history.filter_all : cat}
                       </option>
                     ))}
                   </select>
@@ -223,7 +232,7 @@ export function TransactionFilters({
                   {/* Type Filter */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">
-                      Transaction Type
+                      Type
                     </label>
                     <div className="flex gap-1.5">
                       {(["all", "income", "expense"] as const).map((type) => (
@@ -237,7 +246,7 @@ export function TransactionFilters({
                               : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50"
                           )}
                         >
-                          {type}
+                          {getTypeLabel(type)}
                         </button>
                       ))}
                     </div>
@@ -246,7 +255,7 @@ export function TransactionFilters({
                   {/* Category Filter */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">
-                      Category
+                      {t.history.category}
                     </label>
                     <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1 custom-scrollbar">
                       {categories.map((cat) => (
@@ -260,7 +269,7 @@ export function TransactionFilters({
                               : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50"
                           )}
                         >
-                          {cat === "all" ? "All Categories" : cat}
+                          {cat === "all" ? t.history.filter_all : cat}
                         </button>
                       ))}
                     </div>
