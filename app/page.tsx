@@ -157,10 +157,10 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-70px)] w-full max-w-2xl mx-auto">
-      <Card className="flex-1 flex flex-col border-none bg-transparent shadow-none">
+    <div className="flex flex-col h-[calc(100vh-100px)] md:h-[calc(100vh-140px)] w-full max-w-2xl mx-auto overflow-y-hidden">
+      <Card className="flex-1 flex flex-col border-none bg-transparent shadow-none min-h-0">
         {/* Chat Area */}
-        <ScrollArea className="flex-1 px-2 pr-4">
+        <ScrollArea className="flex-1 px-2 pr-4 min-h-0">
           <div className="flex flex-col gap-4 py-4">
             <AnimatePresence initial={false}>
               {messages.map((message) => (
@@ -175,7 +175,7 @@ export default function ChatPage() {
                     message.role === "user" ? "flex-row-reverse" : "flex-row"
                   )}
                 >
-                  <Avatar className="h-8 w-8 border border-white/10">
+                  <Avatar className="h-8 w-8 border border-white/10 shrink-0">
                     <AvatarFallback
                       className={cn(
                         "text-xs font-bold",
@@ -221,7 +221,7 @@ export default function ChatPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex w-full gap-3"
               >
-                <Avatar className="h-8 w-8 border border-white/10">
+                <Avatar className="h-8 w-8 border border-white/10 shrink-0">
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     <Bot size={16} />
                   </AvatarFallback>
@@ -237,51 +237,51 @@ export default function ChatPage() {
         </ScrollArea>
 
         {/* Input Area */}
-        <div className="pt-4 pb-2">
-          <form
-            onSubmit={(e) => handleSubmit(e)}
-            className="relative flex items-end gap-2 bg-secondary/30 p-2 rounded-3xl border border-white/5 backdrop-blur-sm"
-          >
-            <Input
-              value={inputObj}
-              onChange={(e) => setInputObj(e.target.value)}
-              placeholder={isRecording ? "Listening..." : "Type a message..."}
-              disabled={isRecording || isLoading}
-              className="flex-1 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-3 h-auto text-base placeholder:text-muted-foreground/50 shadow-none min-h-[48px]"
-            />
-
-            <div className="flex items-center gap-1 pr-1 pb-1">
-              {inputObj.trim() ? (
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  size="icon"
-                  className="rounded-full h-10 w-10 shrink-0 bg-primary hover:bg-primary/90 transition-all duration-200"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={isRecording ? stopRecording : startRecording}
-                  variant={isRecording ? "destructive" : "secondary"}
-                  size="icon"
-                  className={cn(
-                    "rounded-full h-10 w-10 shrink-0 transition-all duration-200",
-                    isRecording && "animate-pulse"
-                  )}
-                >
-                  {isRecording ? (
-                    <Square className="h-4 w-4 fill-current" />
-                  ) : (
-                    <Mic className="h-4 w-4" />
-                  )}
-                </Button>
-              )}
-            </div>
-          </form>
-        </div>
       </Card>
+      <div className="pt-2 pb-1 md:pt-4 md:pb-2 shrink-0">
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className="relative flex items-end gap-2 bg-secondary/30 p-2 rounded-3xl border border-white/5 backdrop-blur-sm"
+        >
+          <Input
+            value={inputObj}
+            onChange={(e) => setInputObj(e.target.value)}
+            placeholder={isRecording ? "Listening..." : "Type a message..."}
+            disabled={isRecording || isLoading}
+            className="flex-1 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-3 h-auto text-base placeholder:text-muted-foreground/50 shadow-none min-h-[48px]"
+          />
+
+          <div className="flex items-center gap-1 pr-1 pb-1">
+            {inputObj.trim() ? (
+              <Button
+                type="submit"
+                disabled={isLoading}
+                size="icon"
+                className="rounded-full h-10 w-10 shrink-0 bg-primary hover:bg-primary/90 transition-all duration-200"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={isRecording ? stopRecording : startRecording}
+                variant={isRecording ? "destructive" : "secondary"}
+                size="icon"
+                className={cn(
+                  "rounded-full h-10 w-10 shrink-0 transition-all duration-200",
+                  isRecording && "animate-pulse"
+                )}
+              >
+                {isRecording ? (
+                  <Square className="h-4 w-4 fill-current" />
+                ) : (
+                  <Mic className="h-4 w-4" />
+                )}
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
