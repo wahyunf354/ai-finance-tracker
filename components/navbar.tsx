@@ -43,7 +43,7 @@ export default function Navbar() {
 
       <Link
         href="/about"
-        className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors hover:scale-110 active:scale-95 duration-200"
+        className="hidden md:flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors hover:scale-110 active:scale-95 duration-200"
       >
         <Info className="h-5 w-5" />
         <span className="text-[10px] font-medium">About</span>
@@ -51,7 +51,7 @@ export default function Navbar() {
 
       <button
         onClick={handleLogout}
-        className="flex flex-col items-center gap-1 text-muted-foreground hover:text-destructive transition-colors hover:scale-110 active:scale-95 duration-200"
+        className="hidden md:flex flex-col items-center gap-1 text-muted-foreground hover:text-destructive transition-colors hover:scale-110 active:scale-95 duration-200"
       >
         <LogOut className="h-5 w-5" />
         <span className="text-[10px] font-medium">Logout</span>

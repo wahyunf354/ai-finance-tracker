@@ -43,7 +43,7 @@ export default function AboutPage() {
       {/* About Section */}
       <Card className="bg-card border shadow-sm">
         <CardHeader>
-          <CardTitle>AI Finance Tracker</CardTitle>
+          <CardTitle>Finflow</CardTitle>
           <CardDescription>Version 1.0.0 (Beta)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-sm text-muted-foreground">
