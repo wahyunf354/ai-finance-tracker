@@ -111,15 +111,15 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      {/* Premium Roadmap Section */}
+      {/* Premium Features Section */}
       <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/20 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center gap-2 text-purple-600 dark:text-purple-400">
             <Star className="h-5 w-5 fill-current" />
-            Upcoming Premium Features
+            Finflow Premium
           </CardTitle>
           <CardDescription>
-            Elevate your financial management with our pro tools.
+            Tingkatkan pengelolaan keuangan Anda dengan fitur Pro.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -130,7 +130,8 @@ export default function AboutPage() {
               </div>
               <div className="text-sm">
                 <span className="font-bold">Unlimited Receipt Scanning:</span>{" "}
-                Scan as many receipts as you want without daily limits.
+                Scan struk belanja sepuasnya tanpa batas harian (User gratis
+                dibatasi 3 scan/hari).
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -138,8 +139,9 @@ export default function AboutPage() {
                 <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
               </div>
               <div className="text-sm">
-                <span className="font-bold">Professional PDF Reports:</span> Get
-                beautiful monthly summaries of your finances.
+                <span className="font-bold">Professional PDF Reports:</span>{" "}
+                Download laporan bulanan yang rapi dengan ringkasan visual dan
+                grafik kategori.
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -148,7 +150,8 @@ export default function AboutPage() {
               </div>
               <div className="text-sm">
                 <span className="font-bold">Pro Financial Insights:</span>{" "}
-                Advanced AI analysis to help you save more.
+                Analisis AI mendalam untuk membantu Anda menyeimbangkan
+                pemasukan dan pengeluaran.
               </div>
             </li>
           </ul>

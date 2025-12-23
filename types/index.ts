@@ -27,3 +27,13 @@ export interface CategoryDataItem {
   value: number;
   [key: string]: string | number;
 }
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+  is_premium: boolean;
+  created_at: string;
+  last_login: string;
+}

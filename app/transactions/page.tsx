@@ -35,11 +35,17 @@ export default function TransactionsPage() {
     handleEdit,
     handleUpdate,
     exportToExcel,
+    handleExportPDF,
+    isPremium,
   } = useTransactions();
 
   return (
     <div className="flex flex-col h-full w-full max-w-2xl mx-auto space-y-6 pt-4 px-2 overflow-hidden">
-      <TransactionHeader onExport={exportToExcel} />
+      <TransactionHeader
+        onExportExcel={exportToExcel}
+        onExportPDF={handleExportPDF}
+        isPremium={isPremium}
+      />
 
       <TransactionStats income={stats.income} expense={stats.expense} />
 

@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { Transaction } from "@/types";
+import { Transaction, UserProfile } from "@/types";
 import * as ExcelJS from "exceljs";
+import { exportToPDF } from "@/lib/export-pdf";
 
 export function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -17,6 +18,7 @@ export function useTransactions() {
   const [deletingTransactionId, setDeletingTransactionId] = useState<
     string | null
   >(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(transactions.map((t) => t.category)));
@@ -37,8 +39,21 @@ export function useTransactions() {
     }
   };
 
+  const fetchUser = async () => {
+    try {
+      const res = await fetch("/api/user");
+      const data = await res.json();
+      if (res.ok) setUser(data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
   useEffect(() => {
-    fetchTransactions();
+    const init = async () => {
+      await Promise.all([fetchTransactions(), fetchUser()]);
+    };
+    init();
   }, []);
 
   const filtered = useMemo(() => {
@@ -188,5 +203,16 @@ export function useTransactions() {
     handleEdit,
     handleUpdate,
     exportToExcel,
+    handleExportPDF: () => {
+      if (!user?.is_premium) {
+        toast.error("Premium required", {
+          description: "Upgrade to premium to export professional PDF reports.",
+        });
+        return;
+      }
+      exportToPDF(filtered);
+      toast.success("PDF Report generated!");
+    },
+    isPremium: !!user?.is_premium,
   };
 }
