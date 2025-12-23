@@ -139,12 +139,47 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
     );
 
+    // Identify Source
+    let source: "text" | "audio" | "image" = "text";
+    if (file) {
+      source = file.type.startsWith("image/") ? "image" : "audio";
+    }
+
+    // Check Premium Limits for Receipt Scanning
+    const { data: userData } = await supabase
+      .from("users")
+      .select("is_premium")
+      .eq("email", session.user.email)
+      .single();
+
+    if (!userData?.is_premium && source === "image") {
+      const today = new Date().toISOString().split("T")[0];
+      const { count } = await supabase
+        .from("transactions")
+        .select("*", { count: "exact", head: true })
+        .eq("user_email", session.user.email)
+        .eq("source", "image")
+        .eq("date", today);
+
+      if (count !== null && count >= 3) {
+        return NextResponse.json(
+          {
+            error:
+              "Daily receipt scanning limit reached (3/3). Upgrade to Premium for unlimited scans!",
+            isLimitReached: true,
+          },
+          { status: 403 }
+        );
+      }
+    }
+
     const { data, error } = await supabase
       .from("transactions")
       .insert([
         {
           ...transactionData,
           user_email: session.user.email,
+          source,
         },
       ])
       .select();

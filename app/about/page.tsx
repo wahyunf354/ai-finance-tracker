@@ -111,7 +111,49 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      {/* Feedback Section */}
+      {/* Premium Roadmap Section */}
+      <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/20 shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex items-center gap-2 text-purple-600 dark:text-purple-400">
+            <Star className="h-5 w-5 fill-current" />
+            Upcoming Premium Features
+          </CardTitle>
+          <CardDescription>
+            Elevate your financial management with our pro tools.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-3">
+            <li className="flex items-start gap-3">
+              <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+              </div>
+              <div className="text-sm">
+                <span className="font-bold">Unlimited Receipt Scanning:</span>{" "}
+                Scan as many receipts as you want without daily limits.
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+              </div>
+              <div className="text-sm">
+                <span className="font-bold">Professional PDF Reports:</span> Get
+                beautiful monthly summaries of your finances.
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+              </div>
+              <div className="text-sm">
+                <span className="font-bold">Pro Financial Insights:</span>{" "}
+                Advanced AI analysis to help you save more.
+              </div>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
       <Card className="bg-card border shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
