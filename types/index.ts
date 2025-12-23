@@ -14,3 +14,16 @@ export interface ProcessingResponse {
   error?: string;
   transcript?: string;
 }
+
+export interface ChartDataItem {
+  date: string;
+  income: number;
+  expense: number;
+  [key: string]: string | number;
+}
+
+export interface CategoryDataItem {
+  name: string;
+  value: number;
+  [key: string]: string | number;
+}
