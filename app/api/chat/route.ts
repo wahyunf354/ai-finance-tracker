@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
-import { supabase } from "@/lib/supabase";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -100,10 +99,30 @@ export async function POST(req: NextRequest) {
 
     console.log("Parsed transaction:", transactionData);
 
-    // 4. Insert into Supabase
+    // 3. Insert into Supabase
+    const { auth } = await import("@/auth");
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Initialize Supabase Client (Standard)
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
     const { data, error } = await supabase
       .from("transactions")
-      .insert([transactionData])
+      .insert([
+        {
+          ...transactionData,
+          user_email: session.user.email,
+        },
+      ])
       .select();
 
     if (error) {
