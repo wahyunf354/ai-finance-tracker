@@ -34,6 +34,27 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
     );
 
+    // Fetch dynamic limits from database
+    const { data: configData } = await supabase
+      .from("app_configs")
+      .select("key, value");
+
+    const limits = {
+      image: 3, // default fallback
+      audio: 10, // default fallback
+    };
+
+    if (configData) {
+      const imageLimit = configData.find(
+        (c) => c.key === "free_image_limit"
+      )?.value;
+      const voiceLimit = configData.find(
+        (c) => c.key === "free_voice_limit"
+      )?.value;
+      if (imageLimit) limits.image = parseInt(imageLimit);
+      if (voiceLimit) limits.audio = parseInt(voiceLimit);
+    }
+
     const { data: userData } = await supabase
       .from("users")
       .select("is_premium")
@@ -51,11 +72,11 @@ export async function POST(req: NextRequest) {
           .eq("source", "image")
           .eq("date", today);
 
-        if (count !== null && count >= 3) {
+        if (count !== null && count >= limits.image) {
           const errorMsg =
             lang === "id"
-              ? "Batas harian scan struk telah tercapai (3/3). Upgrade ke Premium untuk scan tanpa batas!"
-              : "Daily receipt scanning limit reached (3/3). Upgrade to Premium for unlimited scans!";
+              ? `Batas harian scan struk telah tercapai (${limits.image}/${limits.image}). Upgrade ke Premium untuk scan tanpa batas!`
+              : `Daily receipt scanning limit reached (${limits.image}/${limits.image}). Upgrade to Premium for unlimited scans!`;
           return NextResponse.json(
             { error: errorMsg, isLimitReached: true },
             { status: 403 }
@@ -69,11 +90,11 @@ export async function POST(req: NextRequest) {
           .eq("source", "audio")
           .eq("date", today);
 
-        if (count !== null && count >= 10) {
+        if (count !== null && count >= limits.audio) {
           const errorMsg =
             lang === "id"
-              ? "Batas harian input suara telah tercapai (10/10). Upgrade ke Premium untuk input suara tanpa batas!"
-              : "Daily voice input limit reached (10/10). Upgrade to Premium for unlimited voice recording!";
+              ? `Batas harian input suara telah tercapai (${limits.audio}/${limits.audio}). Upgrade ke Premium untuk input suara tanpa batas!`
+              : `Daily voice input limit reached (${limits.audio}/${limits.audio}). Upgrade to Premium for unlimited voice recording!`;
           return NextResponse.json(
             { error: errorMsg, isLimitReached: true },
             { status: 403 }
