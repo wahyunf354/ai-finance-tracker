@@ -43,7 +43,7 @@ export function TransactionListMobile({
                 drag="x"
                 dragConstraints={{ left: -140, right: 0 }}
                 dragElastic={0.1}
-                className="relative p-4 flex flex-col gap-2 bg-card hover:bg-muted/30 transition-colors z-10 touch-pan-y"
+                className="relative px-4 py-2 flex flex-col gap-2 bg-card hover:bg-muted/30 transition-colors z-10 touch-pan-y"
               >
                 <div className="flex justify-between items-start">
                   <span className="font-medium text-foreground line-clamp-2 pr-2">

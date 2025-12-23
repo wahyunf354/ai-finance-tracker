@@ -7,11 +7,21 @@ export function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
+    "all"
+  );
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
   const [deletingTransactionId, setDeletingTransactionId] = useState<
     string | null
   >(null);
+
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(transactions.map((t) => t.category)));
+    return ["all", ...cats];
+  }, [transactions]);
 
   const fetchTransactions = async () => {
     try {
@@ -32,22 +42,33 @@ export function useTransactions() {
   }, []);
 
   const filtered = useMemo(() => {
-    return transactions.filter(
-      (t) =>
+    return transactions.filter((t) => {
+      const matchesSearch =
         t.description.toLowerCase().includes(search.toLowerCase()) ||
-        t.category.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [transactions, search]);
+        t.category.toLowerCase().includes(search.toLowerCase());
+
+      const matchesType = filterType === "all" || t.type === filterType;
+
+      const matchesCategory =
+        filterCategory === "all" || t.category === filterCategory;
+
+      const matchesDate =
+        (!dateRange.from || t.date >= dateRange.from) &&
+        (!dateRange.to || t.date <= dateRange.to);
+
+      return matchesSearch && matchesType && matchesCategory && matchesDate;
+    });
+  }, [transactions, search, filterType, filterCategory, dateRange]);
 
   const stats = useMemo(() => {
-    const income = transactions
+    const income = filtered
       .filter((t) => t.type === "income")
       .reduce((acc, curr) => acc + curr.amount, 0);
-    const expense = transactions
+    const expense = filtered
       .filter((t) => t.type === "expense")
       .reduce((acc, curr) => acc + curr.amount, 0);
     return { income, expense };
-  }, [transactions]);
+  }, [filtered]);
 
   const handleDelete = (id: string) => {
     setDeletingTransactionId(id);
@@ -150,6 +171,13 @@ export function useTransactions() {
     loading,
     search,
     setSearch,
+    filterType,
+    setFilterType,
+    filterCategory,
+    setFilterCategory,
+    dateRange,
+    setDateRange,
+    categories,
     editingTransaction,
     setEditingTransaction,
     deletingTransactionId,

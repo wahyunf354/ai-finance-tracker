@@ -8,6 +8,7 @@ import { TransactionStats } from "./_components/TransactionStats";
 import { TransactionSearch } from "./_components/TransactionSearch";
 import { TransactionListMobile } from "./_components/TransactionListMobile";
 import { TransactionTableDesktop } from "./_components/TransactionTableDesktop";
+import { TransactionFilters } from "./_components/TransactionFilters";
 import { EditModal } from "./_components/EditModal";
 import { DeleteConfirmModal } from "./_components/DeleteConfirmModal";
 
@@ -17,6 +18,13 @@ export default function TransactionsPage() {
     loading,
     search,
     setSearch,
+    filterType,
+    setFilterType,
+    filterCategory,
+    setFilterCategory,
+    dateRange,
+    setDateRange,
+    categories,
     editingTransaction,
     setEditingTransaction,
     deletingTransactionId,
@@ -35,8 +43,17 @@ export default function TransactionsPage() {
 
       <TransactionStats income={stats.income} expense={stats.expense} />
 
-      <Card className="flex-1 flex flex-col min-h-0 border bg-card shadow-sm">
+      <Card className="flex-1 flex flex-col min-h-0 border bg-card shadow-sm gap-3">
         <TransactionSearch value={search} onChange={setSearch} />
+        <TransactionFilters
+          filterType={filterType}
+          setFilterType={setFilterType}
+          filterCategory={filterCategory}
+          setFilterCategory={setFilterCategory}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          categories={categories}
+        />
 
         <ScrollArea className="flex-1 overflow-y-auto">
           {loading ? (
