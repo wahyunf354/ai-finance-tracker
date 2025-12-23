@@ -5,10 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatRupiah(value: number) {
+export function formatRupiah(value: number | string) {
   if (value === null || value === undefined) return "Rp 0";
 
-  const number = Number(String(value).replace(/[^0-9]/g, ""));
+  let number: number;
+  if (typeof value === "number") {
+    number = value;
+  } else {
+    number = Number(String(value).replace(/[^0-9]/g, ""));
+  }
 
   if (isNaN(number)) return "Rp 0";
 
@@ -16,5 +21,6 @@ export function formatRupiah(value: number) {
     style: "currency",
     currency: "IDR",
     minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(number);
 }

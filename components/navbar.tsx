@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { MessageSquare, LayoutDashboard, LogOut, Info } from "lucide-react";
+import {
+  MessageSquare,
+  LayoutDashboard,
+  History,
+  LogOut,
+  Info,
+} from "lucide-react";
 import { logout } from "@/app/server-actions/auth";
 
 export default function Navbar() {
@@ -20,10 +26,18 @@ export default function Navbar() {
       </Link>
 
       <Link
-        href="/transactions"
+        href="/dashboard"
         className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors hover:scale-110 active:scale-95 duration-200"
       >
         <LayoutDashboard className="h-5 w-5" />
+        <span className="text-[10px] font-medium">Dashboard</span>
+      </Link>
+
+      <Link
+        href="/transactions"
+        className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors hover:scale-110 active:scale-95 duration-200"
+      >
+        <History className="h-5 w-5" />
         <span className="text-[10px] font-medium">History</span>
       </Link>
 
