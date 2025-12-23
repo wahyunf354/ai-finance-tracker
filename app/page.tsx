@@ -157,7 +157,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] w-full max-w-2xl mx-auto">
+    <div className="flex flex-col h-[calc(100vh-70px)] w-full max-w-2xl mx-auto">
       <Card className="flex-1 flex flex-col border-none bg-transparent shadow-none">
         {/* Chat Area */}
         <ScrollArea className="flex-1 px-2 pr-4">

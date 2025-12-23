@@ -10,7 +10,7 @@ import {
   Calendar,
 } from "lucide-react";
 import * as ExcelJS from "exceljs";
-import { cn } from "@/lib/utils";
+import { cn, formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -39,6 +39,8 @@ export default function TransactionsPage() {
     try {
       const res = await fetch("/api/transactions");
       const data = await res.json();
+
+      console.log("data", data);
 
       if (!res.ok) throw new Error(data.error || "Failed to fetch");
 
@@ -157,7 +159,7 @@ export default function TransactionsPage() {
           </div>
         </div>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center h-40 text-muted-foreground">
               Loading...
@@ -188,8 +190,8 @@ export default function TransactionsPage() {
                               : "text-red-500"
                           )}
                         >
-                          {t.type === "income" ? "+" : "-"}$
-                          {t.amount.toLocaleString()}
+                          {t.type === "income" ? "+" : "-"}
+                          {formatRupiah(t.amount)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-xs text-muted-foreground">
@@ -248,7 +250,7 @@ export default function TransactionsPage() {
                           )}
                         >
                           {t.type === "income" ? "+" : "-"}$
-                          {t.amount.toLocaleString()}
+                          {formatRupiah(t.amount)}
                         </td>
                       </tr>
                     ))}
