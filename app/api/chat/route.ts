@@ -56,12 +56,24 @@ export async function POST(req: NextRequest) {
       Analyze the provided input (audio or text).
       1. Transcribe the input verbatim.
       2. Extract transaction details (date, description, amount, category, type).
-      If the date is not specified, use today's date: ${
+      
+      IMPORTANT: Amount Format Conversion Rules (Indonesian Number Formats):
+      - "k", "rb", or "ribu" means thousand (1,000). Examples: "10k" = 10000, "5rb" = 5000, "3 ribu" = 3000, "5ribu" = 5000
+      - "jt" or "juta" means million (1,000,000). Examples: "10jt" = 10000000, "5 juta" = 5000000, "2jt" = 2000000
+      - Always convert these formats to the actual numeric value in the "amount" field
+      - Examples: "beli makan 50rb" → amount: 50000, "gaji 5jt" → amount: 5000000, "transport 10k" → amount: 10000
+      - If multiple formats are used (e.g., "10 ribu 500"), combine them: 10000 + 500 = 10500
+      
+      Date Handling:
+      - If the date is not specified, use today's date: ${
         new Date().toISOString().split("T")[0]
       }.
+      - If date is mentioned (e.g., "kemarin", "yesterday", "hari ini", "today", specific date), extract and convert to YYYY-MM-DD format.
     `;
 
-    const parts: any[] = [{ text: prompt }];
+    const parts: Array<
+      { text: string } | { inlineData: { data: string; mimeType: string } }
+    > = [{ text: prompt }];
 
     if (text) {
       parts.push({ text: `Input text: "${text}"` });
