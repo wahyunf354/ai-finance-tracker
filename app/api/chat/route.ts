@@ -52,23 +52,32 @@ export async function POST(req: NextRequest) {
 
     // 2. Prepare Prompt and Content
     const prompt = `
-      You are an AI financial assistant. 
-      Analyze the provided input (audio or text).
-      1. Transcribe the input verbatim.
-      2. Extract transaction details (date, description, amount, category, type).
+      You are an AI financial assistant named Finflow. 
+      Analyze the provided input (audio, text, or image of a receipt).
+      
+      1. If the input is an image of a receipt, perform OCR to extract the total amount, merchant name/description, date, and items.
+      2. If the input is audio/text, transcribe or use the text directly.
+      3. Transcribe the input verbatim in the "transcription" field.
+      4. Extract transaction details (date, description, amount, category, type).
       
       IMPORTANT: Amount Format Conversion Rules (Indonesian Number Formats):
-      - "k", "rb", or "ribu" means thousand (1,000). Examples: "10k" = 10000, "5rb" = 5000, "3 ribu" = 3000, "5ribu" = 5000
-      - "jt" or "juta" means million (1,000,000). Examples: "10jt" = 10000000, "5 juta" = 5000000, "2jt" = 2000000
+      - "k", "rb", or "ribu" means thousand (1,000). Examples: "10k" = 10000, "5rb" = 5000, "3 ribu" = 3000
+      - "jt" or "juta" means million (1,000,000). Examples: "10jt" = 10000000, "5 juta" = 5000000
       - Always convert these formats to the actual numeric value in the "amount" field
-      - Examples: "beli makan 50rb" → amount: 50000, "gaji 5jt" → amount: 5000000, "transport 10k" → amount: 10000
-      - If multiple formats are used (e.g., "10 ribu 500"), combine them: 10000 + 500 = 10500
       
       Date Handling:
       - If the date is not specified, use today's date: ${
         new Date().toISOString().split("T")[0]
       }.
-      - If date is mentioned (e.g., "kemarin", "yesterday", "hari ini", "today", specific date), extract and convert to YYYY-MM-DD format.
+      - Convert any mentioned date to YYYY-MM-DD format.
+
+      Category Guidelines:
+      - Food: Restaurants, groceries, coffee, snacks.
+      - Transport: Taxi, fuel, train, parking.
+      - Salary: Income from work.
+      - Bills: Electricity, water, internet, rent.
+      - Entertainment: Movies, games, hobbies.
+      - Other: Anything else.
     `;
 
     const parts: Array<
@@ -80,14 +89,18 @@ export async function POST(req: NextRequest) {
     }
 
     if (file) {
-      console.log("Processing audio file:", file.name);
+      console.log(`Processing ${file.type} file:`, file.name);
       const arrayBuffer = await file.arrayBuffer();
       const base64Data = Buffer.from(arrayBuffer).toString("base64");
 
       parts.push({
         inlineData: {
           data: base64Data,
-          mimeType: file.type || "audio/mp3", // Fallback mimeType if missing
+          mimeType:
+            file.type ||
+            (file.type && file.type.startsWith("image/")
+              ? "image/jpeg"
+              : "audio/mp3"),
         },
       });
     }

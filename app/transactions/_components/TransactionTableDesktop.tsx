@@ -1,4 +1,5 @@
 import { Calendar, Edit, Trash2 } from "lucide-react";
+import { format } from "date-fns";
 import { Transaction } from "@/types";
 import { cn, formatRupiah } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,7 @@ export function TransactionTableDesktop({
               <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-3 w-3 opacity-50" />
-                  {t.date}
+                  {format(new Date(t.date), "d MMM yyyy")}
                 </div>
               </td>
               <td className="px-4 py-3 font-medium text-foreground">

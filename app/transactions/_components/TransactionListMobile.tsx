@@ -1,4 +1,5 @@
 import { Calendar, Edit, Trash2 } from "lucide-react";
+import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import { Transaction } from "@/types";
 import { cn, formatRupiah } from "@/lib/utils";
@@ -62,7 +63,7 @@ export function TransactionListMobile({
                 <div className="flex justify-between items-center text-xs text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-3 w-3" />
-                    {t.date}
+                    {format(new Date(t.date), "d MMM yyyy")}
                   </div>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-secondary text-secondary-foreground border border-border">
                     {t.category}

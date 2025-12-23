@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Mic, Square, Loader2, Bot } from "lucide-react";
+import { Send, Mic, Square, Loader2, Bot, Camera } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ export default function ChatPage() {
       id: "1",
       role: "assistant",
       content:
-        "Hello! I am your AI Finance Assistant. You can tell me about your expenses or income via text or voice.",
+        "Hello! I am your Finflow Assistant. You can tell me about your expenses or income via text or voice.",
       timestamp: new Date(),
     },
   ]);
@@ -34,9 +34,10 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Voice Recording Refs
+  // Voice & Image Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,17 +85,28 @@ export default function ChatPage() {
         .forEach((track) => track.stop());
     }
   };
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleSubmit(undefined, file);
+    }
+  };
 
   const handleSubmit = async (e?: React.FormEvent, audioFile?: File) => {
     e?.preventDefault();
 
     if (!inputObj && !audioFile) return;
 
+    const isImage = audioFile?.type.startsWith("image/");
     const newMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: audioFile ? "🎤 Voice Note" : inputObj,
-      type: audioFile ? "audio" : "text",
+      content: audioFile
+        ? isImage
+          ? "🖼️ Receipt Image"
+          : "🎤 Voice Note"
+        : inputObj,
+      type: audioFile ? (isImage ? "text" : "audio") : "text",
       timestamp: new Date(),
     };
 
@@ -252,6 +264,24 @@ export default function ChatPage() {
           />
 
           <div className="flex items-center gap-1 pr-1 pb-1">
+            <input
+              type="file"
+              ref={imageInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              className="hidden"
+            />
+            {!inputObj.trim() && !isRecording && (
+              <Button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                variant="secondary"
+                size="icon"
+                className="rounded-full h-10 w-10 shrink-0 transition-all duration-200"
+              >
+                <Camera className="h-4 w-4" />
+              </Button>
+            )}
             {inputObj.trim() ? (
               <Button
                 type="submit"
