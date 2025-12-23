@@ -1,4 +1,4 @@
-import { Star, Loader2 } from "lucide-react";
+import { Star, Loader2, CheckCircle2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { useLanguage } from "@/context/LanguageContext";
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { getAppConfig } from "@/app/server-actions/config";
 
 export function PremiumFeatures() {
   const { t } = useLanguage();
@@ -18,24 +18,15 @@ export function PremiumFeatures() {
   useEffect(() => {
     async function fetchLimits() {
       try {
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-        const { data } = await supabase
-          .from("app_configs")
-          .select("key, value");
-
-        if (data) {
-          const imageLimit = data.find(
-            (c) => c.key === "free_image_limit"
-          )?.value;
-          const voiceLimit = data.find(
-            (c) => c.key === "free_voice_limit"
-          )?.value;
+        const result = await getAppConfig();
+        if (result.success && result.config) {
           setLimits({
-            image: imageLimit ? parseInt(imageLimit) : 3,
-            audio: voiceLimit ? parseInt(voiceLimit) : 10,
+            image: result.config.free_image_limit
+              ? parseInt(result.config.free_image_limit)
+              : 3,
+            audio: result.config.free_voice_limit
+              ? parseInt(result.config.free_voice_limit)
+              : 10,
           });
         }
       } catch (error) {
@@ -47,67 +38,72 @@ export function PremiumFeatures() {
     fetchLimits();
   }, []);
 
-  const formatDescription = (text: string, limit: number) => {
-    // Replace something like "3 scan/hari" or "3 scans/day" with the actual limit
+  const formatDescription = (text: string | undefined, limit?: number) => {
+    if (!text) return "";
+    if (limit === undefined) return text;
     return text.replace(/\d+/, limit.toString());
   };
 
+  const featureList = [
+    {
+      id: "receipt",
+      title: t.about?.premium_receipt_title || "Unlimited Receipt Scanning",
+      desc: formatDescription(t.about?.premium_receipt, limits.image),
+    },
+    {
+      id: "voice",
+      title: t.about?.premium_voice_title || "Unlimited Voice Input",
+      desc: formatDescription(t.about?.premium_voice, limits.audio),
+    },
+    {
+      id: "pdf",
+      title: t.about?.premium_pdf_title || "Professional PDF Reports",
+      desc: t.about?.premium_pdf || "Download monthly summaries",
+    },
+    {
+      id: "insights",
+      title: t.about?.premium_insights_title || "Pro Financial Insights",
+      desc: t.about?.premium_insights || "Advanced AI analysis",
+    },
+  ];
+
   return (
-    <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/20 shadow-sm relative overflow-hidden">
+    <Card className="bg-gradient-to-br from-purple-500/15 to-blue-500/15 border-purple-500/30 shadow-md relative">
       {loading && (
-        <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] flex items-center justify-center z-10">
-          <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center z-10 rounded-lg">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
         </div>
       )}
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center gap-2 text-purple-600 dark:text-purple-400">
-          <Star className="h-5 w-5 fill-current" />
-          {t.about.premium_title}
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold">
+          <Star className="h-6 w-6 fill-current text-yellow-500" />
+          {t.about?.premium_title || "Finflow Premium"}
         </CardTitle>
-        <CardDescription>{t.about.premium_desc}</CardDescription>
+        <CardDescription className="text-sm font-medium">
+          {t.about?.premium_desc ||
+            "Tingkatkan pengelolaan keuangan Anda dengan fitur Pro."}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ul className="space-y-3">
-          <li className="flex items-start gap-3">
-            <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
-            </div>
-            <div className="text-sm">
-              <span className="font-bold">
-                {t.about.premium_receipt_title}:
-              </span>{" "}
-              {formatDescription(t.about.premium_receipt, limits.image)}
-            </div>
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
-            </div>
-            <div className="text-sm">
-              <span className="font-bold">{t.about.premium_voice_title}:</span>{" "}
-              {formatDescription(t.about.premium_voice, limits.audio)}
-            </div>
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
-            </div>
-            <div className="text-sm">
-              <span className="font-bold">{t.about.premium_pdf_title}:</span>{" "}
-              {t.about.premium_pdf}
-            </div>
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
-            </div>
-            <div className="text-sm">
-              <span className="font-bold">
-                {t.about.premium_insights_title}:
-              </span>{" "}
-              {t.about.premium_insights}
-            </div>
-          </li>
+      <CardContent className="pb-6">
+        <ul className="grid grid-cols-1 gap-4">
+          {featureList.map((feature) => (
+            <li
+              key={feature.id}
+              className="flex items-start gap-4 p-3 rounded-xl bg-purple-500/5 border border-purple-500/10 hover:bg-purple-500/10 transition-colors"
+            >
+              <div className="flex-shrink-0 mt-1">
+                <CheckCircle2 className="h-5 w-5 text-purple-500" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-foreground leading-tight">
+                  {feature.title}
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {feature.desc}
+                </p>
+              </div>
+            </li>
+          ))}
         </ul>
       </CardContent>
     </Card>
