@@ -26,3 +26,73 @@ export async function GET() {
 
   return NextResponse.json(data);
 }
+
+export async function DELETE(request: Request) {
+  const session = await auth();
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "Missing transaction ID" },
+      { status: 400 }
+    );
+  }
+
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
+  );
+
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", id)
+    .eq("user_email", session.user.email);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
+}
+
+export async function PATCH(request: Request) {
+  const session = await auth();
+  const body = await request.json();
+  const { id, ...updates } = body;
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "Missing transaction ID" },
+      { status: 400 }
+    );
+  }
+
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
+  );
+
+  const { data, error } = await supabase
+    .from("transactions")
+    .update(updates)
+    .eq("id", id)
+    .eq("user_email", session.user.email)
+    .select()
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
+}

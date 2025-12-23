@@ -157,7 +157,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] md:h-[calc(100vh-140px)] w-full max-w-2xl mx-auto overflow-y-hidden">
+    <div className="flex flex-col h-full w-full max-w-2xl mx-auto overflow-hidden">
       <Card className="flex-1 flex flex-col border-none bg-transparent shadow-none min-h-0">
         {/* Chat Area */}
         <ScrollArea className="flex-1 px-2 pr-4 min-h-0">
@@ -238,7 +238,7 @@ export default function ChatPage() {
 
         {/* Input Area */}
       </Card>
-      <div className="pt-2 pb-1 md:pt-4 md:pb-2 shrink-0">
+      <div className="pb-4 md:pb-2 shrink-0">
         <form
           onSubmit={(e) => handleSubmit(e)}
           className="relative flex items-end gap-2 bg-secondary/30 p-2 rounded-3xl border border-white/5 backdrop-blur-sm"
