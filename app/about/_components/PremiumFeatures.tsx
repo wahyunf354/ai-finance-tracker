@@ -48,12 +48,20 @@ export function PremiumFeatures() {
     {
       id: "receipt",
       title: t.about?.premium_receipt_title || "Unlimited Receipt Scanning",
-      desc: formatDescription(t.about?.premium_receipt, limits.image),
+      desc: formatDescription(
+        t.about?.premium_receipt ||
+          "Scan as many receipts as you want without daily limits (Free users limited to 3 scans/day).",
+        limits.image
+      ),
     },
     {
       id: "voice",
       title: t.about?.premium_voice_title || "Unlimited Voice Input",
-      desc: formatDescription(t.about?.premium_voice, limits.audio),
+      desc: formatDescription(
+        t.about?.premium_voice ||
+          "Unlimited voice input every day (Free users are limited to 10 inputs/day).",
+        limits.audio
+      ),
     },
     {
       id: "pdf",
@@ -68,7 +76,7 @@ export function PremiumFeatures() {
   ];
 
   return (
-    <Card className="bg-gradient-to-br from-purple-500/15 to-blue-500/15 border-purple-500/30 shadow-md relative">
+    <Card className="bg-gradient-to-br from-purple-500/15 to-blue-500/15 border-purple-500/30 shadow-md relative min-h-[150px]">
       {loading && (
         <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center z-10 rounded-lg">
           <Loader2 className="h-8 w-8 animate-spin text-purple-500" />

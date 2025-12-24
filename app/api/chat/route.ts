@@ -4,11 +4,12 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
+  let lang = "id";
   try {
     const formData = await req.formData();
     const text = formData.get("text") as string;
     const file = formData.get("file") as File | null;
-    const lang = (formData.get("lang") as string) || "id";
+    lang = (formData.get("lang") as string) || "id";
 
     if (!text && !file) {
       return NextResponse.json({ error: "No input provided" }, { status: 400 });
@@ -233,8 +234,21 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: unknown) {
     console.error("API Error:", error);
-    const errorMessage =
+    let errorMessage =
       error instanceof Error ? error.message : "Internal Server Error";
+
+    // Handle Google API Quota/Rate Limit Errors
+    if (
+      errorMessage.includes("429") ||
+      errorMessage.toLowerCase().includes("quota")
+    ) {
+      errorMessage =
+        lang === "id"
+          ? "Layanan AI sedang sibuk atau limit kuota tercapai. Silakan coba lagi nanti."
+          : "AI service is busy or quota exceeded. Please try again later.";
+      return NextResponse.json({ error: errorMessage }, { status: 429 });
+    }
+
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
