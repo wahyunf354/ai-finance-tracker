@@ -76,7 +76,7 @@ export function PremiumFeatures() {
   ];
 
   return (
-    <Card className="bg-gradient-to-br from-purple-500/15 to-blue-500/15 border-purple-500/30 shadow-md relative min-h-[150px]">
+    <Card className="bg-gradient-to-br from-purple-500/15 to-blue-500/15 border-purple-500/30 shadow-md relative">
       {loading && (
         <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center z-10 rounded-lg">
           <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
