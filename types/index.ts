@@ -36,4 +36,5 @@ export interface UserProfile {
   is_premium: boolean;
   created_at: string;
   last_login: string;
+  billing_cycle_start_day?: number;
 }

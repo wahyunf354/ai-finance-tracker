@@ -15,9 +15,34 @@
   "nav": {
     "chat": "Chat",
     "dashboard": "Dashboard",
+    "budget": "Budget",
     "history": "History",
     "about": "About",
     "logout": "Logout"
+  },
+  "budget_page": {
+    "title": "Smart Budget",
+    "auto_set": "AI Auto-Set",
+    "description": "Use AI Auto-Set to automatically calculate realistic budgets based on your spending habits from the last 3 months.",
+    "add_custom": "Add Custom Budget",
+    "dialog_title": "Set Budget Limit",
+    "category": "Category",
+    "category_placeholder": "e.g. Food",
+    "amount": "Limit Amount (IDR)",
+    "save": "Save Budget",
+    "loading": "Loading your budgets...",
+    "empty": "No budgets set yet.",
+    "empty_hint": "to start instantly.",
+    "exceeded": "You've exceeded your budget!",
+    "confirm_delete": "Are you sure you want to delete this budget?",
+    "toasts": {
+      "generated": "Budgets generated based on your history!",
+      "generate_error": "Failed to generate budgets",
+      "saved": "Budget saved!",
+      "save_error": "Failed to save",
+      "deleted": "Budget deleted",
+      "delete_error": "Failed to delete"
+    }
   },
   "header": {
     "title": "Finflow"
@@ -75,6 +100,32 @@
     "description": "Description",
     "category": "Category",
     "amount": "Amount",
-    "actions": "Actions"
+    "actions": "Actions",
+    "filters": "Filters",
+    "reset": "Reset",
+    "reset_all": "Reset All",
+    "type": "Type",
+    "date_range": "Date Range",
+    "sort_by": "Sort By",
+    "apply": "Apply Filters",
+    "month_view": "Month View",
+    "custom_range": "Custom Range",
+    "to": "TO",
+    "sort_newest": "Newest",
+    "sort_oldest": "Oldest",
+    "sort_highest": "Highest Amount",
+    "sort_lowest": "Lowest Amount",
+    "load_more": "Load More",
+    "loading": "Loading..."
+  },
+  "settings": {
+    "title": "Settings",
+    "dialog_title": "User Settings",
+    "cycle_label": "Monthly Cycle Start Day",
+    "cycle_hint": "Your financial month starts on this day. (e.g., if you set it to 25, your month runs from 25th to 24th).",
+    "save": "Save Changes",
+    "success": "Settings updated",
+    "error": "Failed to save settings",
+    "day_error": "Please enter a valid day (1-31)"
   }
 }

@@ -15,9 +15,34 @@
   "nav": {
     "chat": "Chat",
     "dashboard": "Dashboard",
+    "budget": "Anggaran",
     "history": "Riwayat",
     "about": "Tentang",
     "logout": "Keluar"
+  },
+  "budget_page": {
+    "title": "Smart Budget",
+    "auto_set": "AI Auto-Set",
+    "description": "Gunakan AI Auto-Set untuk menghitung anggaran realistis secara otomatis berdasarkan kebiasaan belanja Anda selama 3 bulan terakhir.",
+    "add_custom": "Tambah Budget",
+    "dialog_title": "Atur Batas Budget",
+    "category": "Kategori",
+    "category_placeholder": "Contoh: Makanan",
+    "amount": "Batas Jumlah (IDR)",
+    "save": "Simpan Budget",
+    "loading": "Memuat anggaran...",
+    "empty": "Belum ada budget.",
+    "empty_hint": "untuk mulai instan.",
+    "exceeded": "Anda melebihi budget!",
+    "confirm_delete": "Yakin ingin menghapus budget ini?",
+    "toasts": {
+      "generated": "Budget berhasil dibuat berdasarkan riwayat!",
+      "generate_error": "Gagal membuat budget",
+      "saved": "Budget disimpan!",
+      "save_error": "Gagal menyimpan",
+      "deleted": "Budget dihapus",
+      "delete_error": "Gagal menghapus"
+    }
   },
   "header": {
     "title": "Finflow"
@@ -75,6 +100,32 @@
     "description": "Deskripsi",
     "category": "Kategori",
     "amount": "Jumlah",
-    "actions": "Aksi"
+    "actions": "Aksi",
+    "filters": "Filter",
+    "reset": "Reset",
+    "reset_all": "Reset Semua",
+    "type": "Tipe",
+    "date_range": "Rentang Tanggal",
+    "sort_by": "Urutkan",
+    "apply": "Terapkan Filter",
+    "month_view": "Tampilan Bulan",
+    "custom_range": "Rentang Kustom",
+    "to": "S/D",
+    "sort_newest": "Terbaru",
+    "sort_oldest": "Terlama",
+    "sort_highest": "Jumlah Tertinggi",
+    "sort_lowest": "Jumlah Terendah",
+    "load_more": "Muat Lebih Banyak",
+    "loading": "Memuat..."
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "dialog_title": "Pengaturan Pengguna",
+    "cycle_label": "Tanggal Mulai Siklus Bulanan",
+    "cycle_hint": "Bulan keuangan Anda dimulai pada hari ini. (Misal diatur tanggal 25, bulan Anda berjalan dari tgl 25 sampai 24 bulan depan).",
+    "save": "Simpan Perubahan",
+    "success": "Pengaturan disimpan",
+    "error": "Gagal menyimpan pengaturan",
+    "day_error": "Harap masukkan tanggal yang valid (1-31)"
   }
 }

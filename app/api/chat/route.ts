@@ -104,6 +104,53 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Fetch user defined budgets to prioritize those categories
+    const { data: userBudgets } = await supabase
+      .from("budgets")
+      .select("category")
+      .eq("user_email", session.user.email);
+
+    let categoryContext =
+      "One of: Food, Transport, Salary, Bills, Entertainment, Other";
+    let categoryGuidelines = `
+      - Food: Restaurants, groceries, coffee, snacks.
+      - Transport: Taxi, fuel, train, parking.
+      - Salary: Income from work.
+      - Bills: Electricity, water, internet, rent.
+      - Entertainment: Movies, games, hobbies.
+      - Other: Anything else.
+    `;
+
+    if (userBudgets && userBudgets.length > 0) {
+      const budgetCategories = userBudgets.map((b) => b.category);
+
+      // Standard categories to ensure we always have fallback for common items
+      const standardCategories = [
+        "Food",
+        "Transport",
+        "Salary",
+        "Bills",
+        "Entertainment",
+        "Shopping",
+      ];
+
+      // Merge user budgets with standard categories, prioritizing user's spelling/casing
+      const uniqueCategories = Array.from(
+        new Set([...budgetCategories, ...standardCategories, "Other", "Income"])
+      );
+
+      categoryContext = `One of: ${uniqueCategories.join(", ")}`;
+      categoryGuidelines = `
+      PRIORITIZE using these categories found in the user's budget settings:
+      ${budgetCategories.map((c) => `- ${c} (User Budget)`).join("\n")}
+
+      If the transaction does not fit a specific user budget, use one of the standard categories:
+      - Food, Transport, Bills, Entertainment, Shopping.
+      
+      Only use 'Other' if it completely doesn't fit any of the above.
+      `;
+    }
+
     // 3. Prepare Gemini Model and Content
     const modelName = "gemini-flash-latest";
     console.log("Initializing Gemini Model:", modelName);
@@ -119,8 +166,7 @@ export async function POST(req: NextRequest) {
             amount: { type: SchemaType.NUMBER },
             category: {
               type: SchemaType.STRING,
-              description:
-                "One of: Food, Transport, Salary, Bills, Entertainment, Other",
+              description: categoryContext,
             },
             type: { type: SchemaType.STRING, description: "income or expense" },
             transcription: {
@@ -162,12 +208,7 @@ export async function POST(req: NextRequest) {
       - Convert any mentioned date to YYYY-MM-DD format.
 
       Category Guidelines:
-      - Food: Restaurants, groceries, coffee, snacks.
-      - Transport: Taxi, fuel, train, parking.
-      - Salary: Income from work.
-      - Bills: Electricity, water, internet, rent.
-      - Entertainment: Movies, games, hobbies.
-      - Other: Anything else.
+      ${categoryGuidelines}
     `;
 
     const parts: Array<

@@ -14,7 +14,7 @@ export function useDashboardData() {
         const res = await fetch("/api/transactions");
         const data = await res.json();
         if (res.ok) {
-          setTransactions(data || []);
+          setTransactions(data.data || []);
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
