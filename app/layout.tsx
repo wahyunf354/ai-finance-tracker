@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Header from "@/components/header";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import { Toaster } from "@/components/ui/sonner";
 
@@ -39,21 +40,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${inter.className} h-screen bg-black text-white selection:bg-purple-500/30`}
+        className={`${inter.className} h-screen selection:bg-purple-500/30`}
       >
-        <LanguageProvider>
-          <div className="mx-auto max-w-md md:max-w-2xl h-screen relative flex flex-col">
-            <Header />
-            <Navbar />
-            <main className="flex-1 p-4 pt-24 pb-24 md:pb-4 md:pt-24">
-              {children}
-            </main>
-          </div>
-        </LanguageProvider>
-        <Toaster position="top-center" richColors />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            <div className="mx-auto max-w-md md:max-w-2xl h-screen relative flex flex-col">
+              <Header />
+              <Navbar />
+              <main className="flex-1 p-4 pt-24 pb-24 md:pb-4 md:pt-24 scroll-smooth">
+                {children}
+              </main>
+            </div>
+          </LanguageProvider>
+          <Toaster position="top-center" richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

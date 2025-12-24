@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { useTransactions } from "./_hooks/useTransactions";
 import { TransactionHeader } from "./_components/TransactionHeader";
 import { TransactionStats } from "./_components/TransactionStats";
@@ -12,7 +13,10 @@ import { TransactionFilters } from "./_components/TransactionFilters";
 import { EditModal } from "./_components/EditModal";
 import { DeleteConfirmModal } from "./_components/DeleteConfirmModal";
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function TransactionsPage() {
+  const { t } = useLanguage();
   const {
     filtered,
     loading,
@@ -24,6 +28,8 @@ export default function TransactionsPage() {
     setFilterCategory,
     dateRange,
     setDateRange,
+    sortBy,
+    setSortBy,
     categories,
     editingTransaction,
     setEditingTransaction,
@@ -37,6 +43,10 @@ export default function TransactionsPage() {
     exportToExcel,
     handleExportPDF,
     isPremium,
+    hasMore,
+    loadMore,
+    loadingMore,
+    user,
   } = useTransactions();
 
   return (
@@ -58,20 +68,23 @@ export default function TransactionsPage() {
           setFilterCategory={setFilterCategory}
           dateRange={dateRange}
           setDateRange={setDateRange}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
           categories={categories}
+          billingCycleStartDay={user?.billing_cycle_start_day || 1}
         />
 
         <ScrollArea className="flex-1 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center h-40 text-muted-foreground">
-              Loading...
+              {t.common.loading}
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex items-center justify-center h-40 text-muted-foreground">
-              No transactions found
+              {t.history.no_transactions}
             </div>
           ) : (
-            <>
+            <div className="pb-4">
               <TransactionListMobile
                 transactions={filtered}
                 onEdit={handleEdit}
@@ -82,7 +95,20 @@ export default function TransactionsPage() {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />
-            </>
+
+              {hasMore && (
+                <div className="flex justify-center mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                    className="w-full max-w-xs"
+                  >
+                    {loadingMore ? t.history.loading : t.history.load_more}
+                  </Button>
+                </div>
+              )}
+            </div>
           )}
         </ScrollArea>
       </Card>

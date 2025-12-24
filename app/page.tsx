@@ -211,7 +211,7 @@ export default function ChatPage() {
                     message.role === "user" ? "flex-row-reverse" : "flex-row"
                   )}
                 >
-                  <Avatar className="h-8 w-8 border border-white/10 shrink-0">
+                  <Avatar className="h-8 w-8 border border-border shrink-0">
                     <AvatarFallback
                       className={cn(
                         "text-xs font-bold",
@@ -257,7 +257,7 @@ export default function ChatPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex w-full gap-3"
               >
-                <Avatar className="h-8 w-8 border border-white/10 shrink-0">
+                <Avatar className="h-8 w-8 border border-border shrink-0">
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     <Bot size={16} />
                   </AvatarFallback>
@@ -277,7 +277,7 @@ export default function ChatPage() {
       <div className="pb-4 md:pb-2 shrink-0">
         <form
           onSubmit={(e) => handleSubmit(e)}
-          className="relative flex items-end gap-2 bg-secondary/30 p-2 rounded-3xl border border-white/5 backdrop-blur-sm"
+          className="relative flex items-end gap-2 bg-secondary/30 p-2 rounded-3xl border border-border backdrop-blur-sm"
         >
           <Input
             value={inputObj}
