@@ -48,7 +48,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-md md:max-w-2xl h-screen relative flex flex-col overflow-hidden">
             <Header />
             <Navbar />
-            <main className="flex-1 p-4 pt-20 pb-24 md:pb-4 md:pt-24 overflow-hidden">
+            <main className="flex-1 p-4 pt-24 pb-24 md:pb-4 md:pt-24 overflow-hidden">
               {children}
             </main>
           </div>

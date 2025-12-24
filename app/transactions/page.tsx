@@ -40,7 +40,7 @@ export default function TransactionsPage() {
   } = useTransactions();
 
   return (
-    <div className="flex flex-col h-full w-full max-w-2xl mx-auto space-y-6 pt-4 px-2 overflow-hidden">
+    <div className="flex flex-col h-full w-full max-w-2xl mx-auto space-y-6 pt-6 px-2 overflow-hidden">
       <TransactionHeader
         onExportExcel={exportToExcel}
         onExportPDF={handleExportPDF}
