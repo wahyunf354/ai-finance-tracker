@@ -32,7 +32,7 @@
   },
   "about": {
     "title": "Tentang & Feedback",
-    "version": "Versi 1.0.0 (Beta)",
+    "version": "Versi 0.2.1 (Beta)",
     "description": "Selamat datang di masa depan pelacakan keuangan pribadi. Aplikasi ini menggunakan Kecerdasan Buatan (Google Gemini) yang canggih untuk menyederhanakan cara Anda mencatat dan menganalisis transaksi harian Anda.",
     "voice_text_title": "Suara & Teks",
     "voice_text_desc": "Cukup bicara atau ketik pengeluaran Anda secara alami. \"Beli kopi 25rb\" adalah semua yang perlu Anda katakan.",
