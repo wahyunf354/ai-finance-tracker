@@ -42,13 +42,13 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body
         suppressHydrationWarning
-        className={`${inter.className} h-screen bg-black text-white selection:bg-purple-500/30 overflow-hidden`}
+        className={`${inter.className} h-screen bg-black text-white selection:bg-purple-500/30`}
       >
         <LanguageProvider>
-          <div className="mx-auto max-w-md md:max-w-2xl h-screen relative flex flex-col overflow-hidden">
+          <div className="mx-auto max-w-md md:max-w-2xl h-screen relative flex flex-col">
             <Header />
             <Navbar />
-            <main className="flex-1 p-4 pt-24 pb-24 md:pb-4 md:pt-24 overflow-hidden">
+            <main className="flex-1 p-4 pt-24 pb-24 md:pb-4 md:pt-24">
               {children}
             </main>
           </div>
