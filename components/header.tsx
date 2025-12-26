@@ -6,7 +6,6 @@ import { UserProfile } from "@/types";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SettingsDialog } from "@/components/settings-dialog";
 import { cn } from "@/lib/utils";
 import {
   Menu,
@@ -20,6 +19,7 @@ import {
   Moon,
   Sun,
   Laptop,
+  Settings,
 } from "lucide-react";
 import { logout } from "@/app/server-actions/auth";
 import { useLanguage } from "@/context/LanguageContext";
@@ -194,15 +194,15 @@ export default function Header() {
 
                 <div className="h-px bg-border mx-2 my-1" />
 
-                {/* Settings Dialog Trigger */}
-                <SettingsDialog
-                  currentStartDay={user?.billing_cycle_start_day || 1}
-                  triggerClass="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                  onUpdate={() => {
-                    // Optionally refetch user or just close menu
-                    setIsMenuOpen(false);
-                  }}
-                />
+                {/* Settings Link */}
+                <Link
+                  href="/settings"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                  <span>{t.settings.title}</span>
+                </Link>
 
                 {/* Logout */}
                 <button
