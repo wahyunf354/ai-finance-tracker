@@ -42,6 +42,10 @@ jest.mock("next/link", () => {
   return MockLink;
 });
 
+jest.mock("next/navigation", () => ({
+  usePathname: jest.fn(() => "/"),
+}));
+
 describe("Navbar Component", () => {
   const mockSetLanguage = jest.fn();
   const mockLogout = logout as jest.Mock;
@@ -66,12 +70,27 @@ describe("Navbar Component", () => {
       setLanguage: mockSetLanguage,
       t: mockTranslations,
     });
+
+    // Mock global fetch
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            id: "user-123",
+            name: "Test User",
+            email: "test@example.com",
+          }),
+      })
+    ) as jest.Mock;
   });
 
-  test("renders all navigation links with correct text and hrefs", () => {
+  test("renders all navigation links with correct text and hrefs", async () => {
     render(<Navbar />);
 
-    expect(screen.getByText("Chat")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Chat")).toBeInTheDocument();
+    });
     expect(screen.getByText("Chat").closest("a")).toHaveAttribute("href", "/");
 
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
@@ -103,6 +122,11 @@ describe("Navbar Component", () => {
   test("calls logout function when logout button is clicked", async () => {
     render(<Navbar />);
 
+    // Wait for the component to receive user data
+    await waitFor(() => {
+      expect(screen.getByText("Logout")).toBeInTheDocument();
+    });
+
     // The logout button is typically hidden on mobile in the current implementation,
     // but we can still find it in the DOM or simulate a click if it's rendered.
     // The component has `hidden md:flex` for the logout button.
@@ -118,9 +142,13 @@ describe("Navbar Component", () => {
     });
   });
 
-  test("toggles language when language button is clicked", () => {
+  test("toggles language when language button is clicked", async () => {
     // Initial state is 'id'
     render(<Navbar />);
+
+    await waitFor(() => {
+      expect(screen.getByTitle("Switch Language")).toBeInTheDocument();
+    });
 
     // The language button is hidden on mobile: `hidden md:flex`
     const languageButton = screen.getByTitle("Switch Language");
@@ -130,7 +158,7 @@ describe("Navbar Component", () => {
     expect(mockSetLanguage).toHaveBeenCalledWith("en");
   });
 
-  test("toggles language from en back to id", () => {
+  test("toggles language from en back to id", async () => {
     (useLanguage as jest.Mock).mockReturnValue({
       language: "en",
       setLanguage: mockSetLanguage,
@@ -139,6 +167,10 @@ describe("Navbar Component", () => {
 
     render(<Navbar />);
 
+    await waitFor(() => {
+      expect(screen.getByTitle("Switch Language")).toBeInTheDocument();
+    });
+
     const languageButton = screen.getByTitle("Switch Language");
 
     fireEvent.click(languageButton);
@@ -146,8 +178,11 @@ describe("Navbar Component", () => {
     expect(mockSetLanguage).toHaveBeenCalledWith("id");
   });
 
-  test("render mode toggle component", () => {
+  test("render mode toggle component", async () => {
     render(<Navbar />);
-    expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+    });
   });
 });
