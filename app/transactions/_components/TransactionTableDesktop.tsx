@@ -16,11 +16,11 @@ export function TransactionTableDesktop({
   onDelete,
 }: TransactionTableDesktopProps) {
   return (
-    <div className="hidden md:block">
-      <table className="w-full text-sm text-left">
+    <div className="hidden md:block overflow-x-auto pb-2">
+      <table className="w-full text-sm text-left min-w-[800px]">
         <thead className="text-xs text-muted-foreground uppercase bg-muted/50 sticky top-0 backdrop-blur-md z-10">
           <tr>
-            <th className="px-4 py-3 font-medium">Date</th>
+            <th className="px-4 py-3 font-medium whitespace-nowrap">Date</th>
             <th className="px-4 py-3 font-medium">Description</th>
             <th className="px-4 py-3 font-medium">Category</th>
             <th className="px-4 py-3 font-medium text-right">Amount</th>
@@ -39,7 +39,10 @@ export function TransactionTableDesktop({
                   {format(new Date(t.date), "d MMM yyyy")}
                 </div>
               </td>
-              <td className="px-4 py-3 font-medium text-foreground">
+              <td
+                className="px-4 py-3 font-medium text-foreground"
+                title={t.description}
+              >
                 {t.description}
               </td>
               <td className="px-4 py-3">

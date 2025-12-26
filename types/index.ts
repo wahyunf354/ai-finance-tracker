@@ -6,6 +6,9 @@ export type Transaction = {
   amount: number;
   category: string;
   type: "income" | "expense";
+  items?: { name: string; quantity: number | string; price: number }[];
+  tax?: number;
+  discount?: number;
 };
 
 export interface ProcessingResponse {

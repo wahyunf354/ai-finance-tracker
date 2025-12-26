@@ -1,4 +1,4 @@
-import { Filter, Calendar as CalendarIcon, X } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -178,7 +178,7 @@ export function TransactionFilters({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="grid grid-cols-4 gap-4 py-4 border-t mt-4">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-4 py-4 border-t mt-4">
                 {/* Type Filter */}
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -190,7 +190,7 @@ export function TransactionFilters({
                         key={type}
                         onClick={() => setFilterType(type)}
                         className={cn(
-                          "flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all capitalize border",
+                          "flex-1 h-9 flex items-center justify-center rounded-lg text-xs font-medium transition-all capitalize border",
                           filterType === type
                             ? "bg-primary border-primary text-primary-foreground"
                             : "bg-muted/50 border-transparent hover:bg-muted text-muted-foreground"
@@ -232,7 +232,7 @@ export function TransactionFilters({
                           viewMode === "monthly" ? "custom" : "monthly"
                         )
                       }
-                      className="text-[10px] text-primary hover:underline font-medium"
+                      className="text-[10px] text-primary hover:underline font-medium whitespace-nowrap"
                     >
                       {viewMode === "monthly"
                         ? t.history.custom_range

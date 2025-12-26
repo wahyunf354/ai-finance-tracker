@@ -169,6 +169,24 @@ export async function POST(req: NextRequest) {
               description: categoryContext,
             },
             type: { type: SchemaType.STRING, description: "income or expense" },
+            items: {
+              type: SchemaType.ARRAY,
+              description: "List of items in the receipt",
+              items: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  name: { type: SchemaType.STRING },
+                  quantity: { type: SchemaType.NUMBER },
+                  price: { type: SchemaType.NUMBER },
+                },
+                required: ["name", "quantity", "price"],
+              },
+            },
+            tax: { type: SchemaType.NUMBER, description: "Total tax amount" },
+            discount: {
+              type: SchemaType.NUMBER,
+              description: "Total discount amount",
+            },
             transcription: {
               type: SchemaType.STRING,
               description:
@@ -181,6 +199,9 @@ export async function POST(req: NextRequest) {
             "amount",
             "category",
             "type",
+            "items",
+            "tax",
+            "discount",
             "transcription",
           ],
         },
@@ -191,10 +212,10 @@ export async function POST(req: NextRequest) {
       You are an AI financial assistant named Finflow. 
       Analyze the provided input (audio, text, or image of a receipt).
       
-      1. If the input is an image of a receipt, perform OCR to extract the total amount, merchant name/description, date, and items.
+      1. If the input is an image of a receipt, perform OCR to extract the total amount, merchant name/description, date, line items (name, qty, price), tax, and discount.
       2. If the input is audio/text, transcribe or use the text directly.
       3. Transcribe the input verbatim in the "transcription" field.
-      4. Extract transaction details (date, description, amount, category, type).
+      4. Extract transaction details (date, description, amount, category, type, items, tax, discount). Default items to empty array if none found. Default tax/discount to 0 if not found.
       
       IMPORTANT: Amount Format Conversion Rules (Indonesian Number Formats):
       - "k", "rb", or "ribu" means thousand (1,000). Examples: "10k" = 10000, "5rb" = 5000, "3 ribu" = 3000

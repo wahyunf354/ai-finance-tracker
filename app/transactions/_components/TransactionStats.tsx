@@ -16,7 +16,7 @@ export function TransactionStats({ income, expense }: TransactionStatsProps) {
             <TrendingUp className="h-4 w-4" />
             <span className="text-sm font-medium">Income</span>
           </div>
-          <div className="text-2xl font-bold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="text-xl sm:text-2xl font-bold text-foreground break-words">
             {formatRupiah(income)}
           </div>
         </CardContent>
@@ -27,7 +27,7 @@ export function TransactionStats({ income, expense }: TransactionStatsProps) {
             <TrendingDown className="h-4 w-4" />
             <span className="text-sm font-medium">Expenses</span>
           </div>
-          <div className="text-2xl font-bold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="text-xl sm:text-2xl font-bold text-foreground break-words">
             {formatRupiah(expense)}
           </div>
         </CardContent>
