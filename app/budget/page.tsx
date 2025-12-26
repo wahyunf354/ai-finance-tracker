@@ -128,7 +128,7 @@ export default function BudgetPage() {
         await fetchData();
         toast.success(t.budget_page.toasts.generated);
       }
-    } catch (_error) {
+    } catch {
       toast.error(t.budget_page.toasts.generate_error);
     } finally {
       setIsSuggesting(false);
@@ -155,7 +155,7 @@ export default function BudgetPage() {
         setEditingCategory("");
         setIsEditMode(false);
       }
-    } catch (_error) {
+    } catch {
       toast.error(t.budget_page.toasts.save_error);
     }
   };
@@ -183,7 +183,7 @@ export default function BudgetPage() {
         fetchData();
         toast.success(t.budget_page.toasts.deleted);
       }
-    } catch (_error) {
+    } catch {
       toast.error(t.budget_page.toasts.delete_error);
     } finally {
       setDeleteTarget(null);
@@ -229,20 +229,20 @@ export default function BudgetPage() {
       {/* Summary Card */}
       <Card className="border-none bg-gradient-to-br from-primary/10 to-primary/5">
         <CardContent className="p-6">
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                 Total Budget
               </span>
-              <div className="text-lg font-bold text-primary">
+              <div className="text-2xl sm:text-lg font-bold text-primary">
                 {formatRupiah(totalBudget)}
               </div>
             </div>
-            <div className="space-y-1 border-x border-primary/10">
+            <div className="space-y-1 sm:border-x border-primary/10">
               <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                 Total Spent
               </span>
-              <div className="text-lg font-bold text-foreground">
+              <div className="text-2xl sm:text-lg font-bold text-foreground">
                 {formatRupiah(totalSpent)}
               </div>
             </div>
@@ -251,7 +251,7 @@ export default function BudgetPage() {
                 Remaining
               </span>
               <div
-                className={`text-lg font-bold ${
+                className={`text-2xl sm:text-lg font-bold ${
                   totalBudget - totalSpent < 0
                     ? "text-red-500"
                     : "text-green-500"
