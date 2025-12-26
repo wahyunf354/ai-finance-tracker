@@ -13,9 +13,34 @@ import {
 import { logout } from "@/app/server-actions/auth";
 import { useLanguage } from "@/context/LanguageContext";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useState, useEffect } from "react";
+import { UserProfile } from "@/types";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/user");
+        const data = await res.json();
+        if (res.ok) {
+          setUser(data);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setUser(null);
+      }
+    };
+    fetchUser();
+  }, [pathname]);
+
+  if (!user) return null;
 
   const handleLogout = async () => {
     await logout();

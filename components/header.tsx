@@ -195,23 +195,31 @@ export default function Header() {
                 <div className="h-px bg-border mx-2 my-1" />
 
                 {/* Settings Link */}
-                <Link
-                  href="/settings"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                >
-                  <Settings className="h-4 w-4" />
-                  <span>{t.settings.title}</span>
-                </Link>
+                {user && (
+                  <>
+                    <Link
+                      href="/settings"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                    >
+                      <Settings className="h-4 w-4" />
+                      <span>{t.settings.title}</span>
+                    </Link>
+
+                    <div className="h-px bg-border mx-2 my-1" />
+                  </>
+                )}
 
                 {/* Logout */}
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-500/10 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
-                </button>
+                {user && (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-500/10 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
