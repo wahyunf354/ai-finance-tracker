@@ -32,6 +32,7 @@ describe("exportToPDF", () => {
     const transactions = [
       {
         id: "1",
+        created_at: new Date().toISOString(),
         amount: 50000,
         type: "expense" as const,
         category: "Food",
@@ -40,6 +41,7 @@ describe("exportToPDF", () => {
       },
       {
         id: "2",
+        created_at: new Date().toISOString(),
         amount: 100000,
         type: "income" as const,
         category: "Salary",
