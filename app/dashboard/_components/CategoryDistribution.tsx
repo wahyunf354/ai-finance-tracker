@@ -70,20 +70,21 @@ export function CategoryDistribution({
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-full space-y-3">
-              {categoryData.slice(0, 5).map((item, index) => (
+
+            <div className="w-full space-y-3 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
+              {categoryData.map((item, index) => (
                 <div
                   key={item.name}
                   className="flex items-center justify-between group cursor-default"
                 >
                   <div className="flex items-center gap-2.5">
                     <div
-                      className="h-2.5 w-2.5 rounded-full shadow-sm"
+                      className="h-2.5 w-2.5 rounded-full shadow-sm shrink-0"
                       style={{
                         backgroundColor: COLORS[index % COLORS.length],
                       }}
                     />
-                    <span className="text-[12px] font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-[100px]">
+                    <span className="text-[12px] font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-[120px]">
                       {item.name}
                     </span>
                   </div>
