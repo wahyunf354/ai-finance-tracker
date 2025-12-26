@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Button } from "@/components/ui/button";
 import { useTransactions } from "./_hooks/useTransactions";
 import { TransactionHeader } from "./_components/TransactionHeader";
@@ -74,7 +74,7 @@ export default function TransactionsPage() {
           billingCycleStartDay={user?.billing_cycle_start_day || 1}
         />
 
-        <ScrollArea className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           {loading ? (
             <div className="flex items-center justify-center h-40 text-muted-foreground">
               {t.common.loading}
@@ -110,7 +110,7 @@ export default function TransactionsPage() {
               )}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </Card>
 
       <EditModal
