@@ -59,3 +59,22 @@ describe("formatCompactNumber", () => {
     expect(formatCompactNumber(2500000000)).toBe("2.5M");
   });
 });
+
+import { cn } from "@/lib/utils";
+
+describe("cn", () => {
+  it("merges class names correctly", () => {
+    expect(cn("c1", "c2")).toBe("c1 c2");
+  });
+
+  it("handles conditional classes", () => {
+    expect(cn("c1", true && "c2", false && "c3")).toBe("c1 c2");
+  });
+
+  it("overrides conflicting tailwind classes", () => {
+    // p-4 should overwrite p-2
+    expect(cn("p-2", "p-4")).toBe("p-4");
+    // text-red-500 should overwrite text-blue-500
+    expect(cn("text-blue-500", "text-red-500")).toBe("text-red-500");
+  });
+});

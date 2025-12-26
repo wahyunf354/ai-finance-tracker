@@ -25,9 +25,7 @@ export function QuickStats({ stats }: QuickStatsProps) {
               <Wallet className="h-4 w-4 text-primary" />
             </div>
           </div>
-          <div className="text-2xl font-bold">
-            {formatRupiah(stats.balance)}
-          </div>
+          <div className="text-xl font-bold">{formatRupiah(stats.balance)}</div>
           <p className="text-[10px] text-muted-foreground mt-1">
             Available funds in your wallet
           </p>
@@ -44,7 +42,7 @@ export function QuickStats({ stats }: QuickStatsProps) {
               <TrendingUp className="h-4 w-4 text-green-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">
+          <div className="text-xl font-bold">
             {formatRupiah(stats.totalIncome)}
           </div>
           <p className="text-[10px] text-muted-foreground mt-1">
@@ -63,7 +61,7 @@ export function QuickStats({ stats }: QuickStatsProps) {
               <TrendingDown className="h-4 w-4 text-red-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">
+          <div className="text-xl font-bold">
             {formatRupiah(stats.totalExpense)}
           </div>
           <p className="text-[10px] text-muted-foreground mt-1">
