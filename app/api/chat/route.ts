@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const { createClient } = await import("@supabase/supabase-js");
     const supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!,
     );
 
     // Fetch dynamic limits from database
@@ -47,10 +47,10 @@ export async function POST(req: NextRequest) {
 
     if (configData) {
       const imageLimit = configData.find(
-        (c) => c.key === "free_image_limit"
+        (c) => c.key === "free_image_limit",
       )?.value;
       const voiceLimit = configData.find(
-        (c) => c.key === "free_voice_limit"
+        (c) => c.key === "free_voice_limit",
       )?.value;
       if (imageLimit) limits.image = parseInt(imageLimit);
       if (voiceLimit) limits.audio = parseInt(voiceLimit);
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
               : `Daily receipt scanning limit reached (${limits.image}/${limits.image}). Upgrade to Premium for unlimited scans!`;
           return NextResponse.json(
             { error: errorMsg, isLimitReached: true },
-            { status: 403 }
+            { status: 403 },
           );
         }
       } else if (source === "audio") {
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
               : `Daily voice input limit reached (${limits.audio}/${limits.audio}). Upgrade to Premium for unlimited voice recording!`;
           return NextResponse.json(
             { error: errorMsg, isLimitReached: true },
-            { status: 403 }
+            { status: 403 },
           );
         }
       }
@@ -118,6 +118,9 @@ export async function POST(req: NextRequest) {
       - Salary: Income from work.
       - Bills: Electricity, water, internet, rent.
       - Entertainment: Movies, games, hobbies.
+      - Shopping: Clothing, electronics, accessories.
+      - Health: Medical expenses, gym memberships.
+      - Savings: Savings and investments.
       - Other: Anything else.
     `;
 
@@ -132,11 +135,18 @@ export async function POST(req: NextRequest) {
         "Bills",
         "Entertainment",
         "Shopping",
+        "Health",
+        "Savings",
       ];
 
       // Merge user budgets with standard categories, prioritizing user's spelling/casing
       const uniqueCategories = Array.from(
-        new Set([...budgetCategories, ...standardCategories, "Other", "Income"])
+        new Set([
+          ...budgetCategories,
+          ...standardCategories,
+          "Other",
+          "Income",
+        ]),
       );
 
       categoryContext = `One of: ${uniqueCategories.join(", ")}`;

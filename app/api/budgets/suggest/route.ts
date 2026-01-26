@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const { createClient } = await import("@supabase/supabase-js");
     const supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!,
     );
 
     // 1. Fetch historical data (last 90 days)
@@ -85,8 +85,10 @@ export async function POST(req: NextRequest) {
     const json = JSON.parse(response.text());
 
     return NextResponse.json(json);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Budget Suggest Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

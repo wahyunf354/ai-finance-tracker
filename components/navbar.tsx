@@ -9,6 +9,7 @@ import {
   Info,
   Languages,
   Calculator,
+  Settings,
 } from "lucide-react";
 import { logout } from "@/app/server-actions/auth";
 import { useLanguage } from "@/context/LanguageContext";
@@ -90,6 +91,14 @@ export default function Navbar() {
       >
         <Info className="h-5 w-5" />
         <span className="text-[10px] font-medium">{t.about.title}</span>
+      </Link>
+
+      <Link
+        href="/settings"
+        className="hidden md:flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors hover:scale-110 active:scale-95 duration-200"
+      >
+        <Settings className="h-5 w-5" />
+        <span className="text-[10px] font-medium">{t.settings.title}</span>
       </Link>
 
       <button
