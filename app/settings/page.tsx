@@ -27,8 +27,9 @@ export default function SettingsPage() {
     fetch("/api/user")
       .then((res) => res.json())
       .then((data) => {
-        if (data?.user?.billing_cycle_start_day) {
-          setDay(data.user.billing_cycle_start_day);
+        console.log("data", data);
+        if (data?.billing_cycle_start_day) {
+          setDay(data.billing_cycle_start_day);
         }
         setFetching(false);
       })
