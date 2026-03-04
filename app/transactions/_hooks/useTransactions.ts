@@ -24,7 +24,7 @@ export function useTransactions() {
   const debouncedSearch = useDebounceValue(search, 500);
 
   const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
-    "all"
+    "all",
   );
   const [filterCategory, setFilterCategory] = useState("all");
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
@@ -69,7 +69,7 @@ export function useTransactions() {
 
         const params = new URLSearchParams({
           page: currentPage.toString(),
-          limit: "20",
+          limit: "1000",
           search: debouncedSearch,
           type: filterType,
           category: filterCategory,
@@ -87,7 +87,7 @@ export function useTransactions() {
         const meta = payload.meta;
 
         setTransactions((prev) =>
-          reset ? newTransactions : [...prev, ...newTransactions]
+          reset ? newTransactions : [...prev, ...newTransactions],
         );
         setTotal(meta.total);
         setHasMore(newTransactions.length === 20); // If we got full limit, likely more exists
@@ -99,7 +99,7 @@ export function useTransactions() {
         setLoadingMore(false);
       }
     },
-    [debouncedSearch, filterType, filterCategory, dateRange, sortBy]
+    [debouncedSearch, filterType, filterCategory, dateRange, sortBy],
   );
 
   const fetchUser = async () => {
@@ -155,7 +155,7 @@ export function useTransactions() {
       });
       if (res.ok) {
         setTransactions((prev) =>
-          prev.filter((t) => t.id !== deletingTransactionId)
+          prev.filter((t) => t.id !== deletingTransactionId),
         );
         toast.success("Transaction deleted successfully");
         setDeletingTransactionId(null);
@@ -189,7 +189,7 @@ export function useTransactions() {
       if (res.ok) {
         const updated = await res.json();
         setTransactions((prev) =>
-          prev.map((t) => (t.id === updated.id ? updated : t))
+          prev.map((t) => (t.id === updated.id ? updated : t)),
         );
         setEditingTransaction(null);
         toast.success("Transaction updated successfully");

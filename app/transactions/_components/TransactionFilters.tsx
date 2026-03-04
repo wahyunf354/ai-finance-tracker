@@ -41,38 +41,31 @@ export function TransactionFilters({
 
   // Calculate Date Range based on cycle day
   const calculateDateRange = (
-    month: number,
+    month: number, // Target bulan (0 = Jan, 1 = Feb, dst)
     year: number,
-    startDay: number
+    startDay: number,
   ) => {
-    // Logic:
-    // If startDay is 1: Month is 1st to Last Day of Month.
-    // If startDay > 1: Month is StartDay of PrevMonth to (StartDay - 1) of CurrentMonth ?
-    // OR StartDay of CurrentMonth to (StartDay - 1) of NextMonth?
-    // User said "1 month rotation". Usually "January Budget" means starting in Jan.
-    // Let's assume: Period starting in Selected Month.
-    // Example: Selected Jan 2025, Cycle 25. Range: Jan 25, 2025 - Feb 24, 2025.
-
-    // Actually, usually if I say "Expenses for Jan", and my cycle is 25th.
-    // Does it map to Dec 25-Jan 24 or Jan 25-Feb 24?
-    // Let's assume start date provided matches the month.
-
-    let fromDate: Date;
-    let toDate: Date;
-
+    // Jika startDay = 1, kita ambil kalender normal (1 s/d akhir bulan)
     if (startDay === 1) {
-      fromDate = new Date(year, month, 1);
-      toDate = new Date(year, month + 1, 0);
-    } else {
-      // Option: Period starting in this month
-      fromDate = new Date(year, month, startDay);
-      toDate = new Date(year, month + 1, startDay - 1);
+      const fromDate = new Date(year, month, 1);
+      const toDate = new Date(year, month + 1, 0);
+      return {
+        from: fromDate.toISOString().split("T")[0],
+        to: toDate.toISOString().split("T")[0],
+      };
     }
 
-    // Format YYYY-MM-DD
-    const isoFrom = fromDate.toISOString().split("T")[0];
-    const isoTo = toDate.toISOString().split("T")[0];
-    return { from: isoFrom, to: isoTo };
+    // Jika startDay > 1 (misal 25):
+    // Untuk "April" (month: 3), kita ingin:
+    // Start: 25 Maret (month - 1)
+    // End: 24 April (month)
+    const fromDate = new Date(year, month - 1, startDay);
+    const toDate = new Date(year, month, startDay - 1);
+
+    return {
+      from: fromDate.toISOString().split("T")[0],
+      to: toDate.toISOString().split("T")[0],
+    };
   };
 
   // Effect to update date range when monthly params change
@@ -81,15 +74,25 @@ export function TransactionFilters({
       const range = calculateDateRange(
         selectedMonth,
         selectedYear,
-        billingCycleStartDay
+        billingCycleStartDay,
       );
-      // Only update if different to avoid loop (though setDateRange usually checks equality if primitive, object might trigger)
-      // We should check values.
-      if (range.from !== dateRange.from || range.to !== dateRange.to) {
+
+      // Gunakan fungsi pembantu kecil untuk cek perubahan nilai
+      const hasChanged =
+        range.from !== dateRange.from || range.to !== dateRange.to;
+
+      if (hasChanged) {
         setDateRange(range);
       }
     }
-  }, [viewMode, selectedMonth, selectedYear, billingCycleStartDay]);
+  }, [
+    viewMode,
+    selectedMonth,
+    selectedYear,
+    billingCycleStartDay,
+    dateRange.from,
+    dateRange.to,
+  ]);
 
   const activeFiltersCount = [
     filterType !== "all",
@@ -131,7 +134,7 @@ export function TransactionFilters({
 
   const years = Array.from(
     { length: 5 },
-    (_, i) => new Date().getFullYear() - 2 + i
+    (_, i) => new Date().getFullYear() - 2 + i,
   );
 
   return (
@@ -145,7 +148,7 @@ export function TransactionFilters({
             onClick={() => setIsOpen(!isOpen)}
             className={cn(
               "gap-2 h-9 rounded-xl border-dashed",
-              isOpen && "bg-muted"
+              isOpen && "bg-muted",
             )}
           >
             <Filter className="h-4 w-4" />
@@ -193,7 +196,7 @@ export function TransactionFilters({
                           "flex-1 h-9 flex items-center justify-center rounded-lg text-xs font-medium transition-all capitalize border",
                           filterType === type
                             ? "bg-primary border-primary text-primary-foreground"
-                            : "bg-muted/50 border-transparent hover:bg-muted text-muted-foreground"
+                            : "bg-muted/50 border-transparent hover:bg-muted text-muted-foreground",
                         )}
                       >
                         {getTypeLabel(type)}
@@ -229,7 +232,7 @@ export function TransactionFilters({
                     <button
                       onClick={() =>
                         setViewMode(
-                          viewMode === "monthly" ? "custom" : "monthly"
+                          viewMode === "monthly" ? "custom" : "monthly",
                         )
                       }
                       className="text-[10px] text-primary hover:underline font-medium whitespace-nowrap"
@@ -311,7 +314,7 @@ export function TransactionFilters({
                           | "newest"
                           | "oldest"
                           | "highest"
-                          | "lowest"
+                          | "lowest",
                       )
                     }
                     className="w-full h-9 px-3 rounded-lg border border-transparent bg-muted/50 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -401,7 +404,7 @@ export function TransactionFilters({
                             "flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all capitalize border",
                             filterType === type
                               ? "bg-primary border-primary text-primary-foreground shadow-sm shadow-primary/20"
-                              : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50"
+                              : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50",
                           )}
                         >
                           {getTypeLabel(type)}
@@ -424,7 +427,7 @@ export function TransactionFilters({
                             "py-2 px-3.5 rounded-xl text-[11px] font-medium transition-all capitalize border",
                             filterCategory === cat
                               ? "bg-primary/10 border-primary text-primary"
-                              : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50"
+                              : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50",
                           )}
                         >
                           {cat === "all" ? t.history.filter_all : cat}
@@ -442,7 +445,7 @@ export function TransactionFilters({
                       <button
                         onClick={() =>
                           setViewMode(
-                            viewMode === "monthly" ? "custom" : "monthly"
+                            viewMode === "monthly" ? "custom" : "monthly",
                           )
                         }
                         className="text-[10px] text-primary hover:underline font-medium"
@@ -529,12 +532,12 @@ export function TransactionFilters({
                               "py-2.5 rounded-xl text-xs font-medium transition-all capitalize border",
                               sortBy === sort
                                 ? "bg-primary border-primary text-primary-foreground shadow-sm shadow-primary/20"
-                                : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50"
+                                : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted/50",
                             )}
                           >
                             {getSortLabel(sort)}
                           </button>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

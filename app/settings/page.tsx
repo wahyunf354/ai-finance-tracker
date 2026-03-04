@@ -39,7 +39,7 @@ export default function SettingsPage() {
   }, []);
 
   const handleSave = async () => {
-    if (day < 1 || day > 31) {
+    if (day < 1 || day > 28) {
       toast.error(t.settings?.day_error || "Invalid day");
       return;
     }

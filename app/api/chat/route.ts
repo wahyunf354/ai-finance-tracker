@@ -111,17 +111,19 @@ export async function POST(req: NextRequest) {
       .eq("user_email", session.user.email);
 
     let categoryContext =
-      "One of: Food, Transport, Salary, Bills, Entertainment, Other";
+      "One of: Food, Transport, Salary, Bills, Entertainment, Sedekah, Savings, Health, Other";
     let categoryGuidelines = `
-      - Food: Restaurants, groceries, coffee, snacks.
-      - Transport: Taxi, fuel, train, parking.
-      - Salary: Income from work.
-      - Bills: Electricity, water, internet, rent.
-      - Entertainment: Movies, games, hobbies.
-      - Shopping: Clothing, electronics, accessories.
-      - Health: Medical expenses, gym memberships.
-      - Savings: Savings and investments.
-      - Other: Anything else.
+      - Food: Restaurants, groceries, coffee, snacks, makan di rumah, etc.
+      - Sedekah: Donations, charity, zakat, infak, shodaqoh, etc.
+      - Transport: Taxi, fuel, train, parking, perawatan kendaraan, etc.
+      - Salary: Income from work, etc.
+      - Bills: Electricity, water, internet, rent, etc.
+      - Entertainment: Movies, games, hobbies, etc.
+      - Shopping: Clothing, electronics, accessories, etc.
+      - Health: Medical expenses, gym memberships, etc.
+      - Savings: Savings and investments, tabungan, arisan, etc.
+      - Other: Anything else, etc.
+      - Income Other: diberi orang lain, bonus, etc.
     `;
 
     if (userBudgets && userBudgets.length > 0) {
