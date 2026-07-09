@@ -24,3 +24,16 @@ export function formatRupiah(value: number | string) {
     maximumFractionDigits: 0,
   }).format(number);
 }
+
+export function formatCompactNumber(number: number): string {
+  if (number >= 1000000000) {
+    return (number / 1000000000).toFixed(1).replace(/\.0$/, "") + "M"; // Miliar
+  }
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(1).replace(/\.0$/, "") + "jt"; // Juta
+  }
+  if (number >= 1000) {
+    return (number / 1000).toFixed(0) + "k"; // Ribu
+  }
+  return number.toString();
+}

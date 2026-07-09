@@ -116,7 +116,11 @@
     "sort_highest": "Highest Amount",
     "sort_lowest": "Lowest Amount",
     "load_more": "Load More",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "add_transaction": "Add Transaction",
+    "add_title": "Add Transaction",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "settings": {
     "title": "Settings",

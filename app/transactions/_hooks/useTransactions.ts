@@ -1,8 +1,18 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { Transaction, UserProfile } from "@/types";
+import { STANDARD_CATEGORIES } from "@/lib/categories";
+import type { NewTransactionForm } from "../_components/AddTransactionModal";
 import * as ExcelJS from "exceljs";
 import { exportToPDF } from "@/lib/export-pdf";
+
+const emptyTransactionForm = (): NewTransactionForm => ({
+  description: "",
+  amount: "",
+  date: new Date().toISOString().split("T")[0],
+  category: STANDARD_CATEGORIES[0],
+  type: "expense",
+});
 
 // Simple debounce hook implementation if package not available
 function useDebounceValue<T>(value: T, delay: number): T {
@@ -24,7 +34,7 @@ export function useTransactions() {
   const debouncedSearch = useDebounceValue(search, 500);
 
   const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
-    "all"
+    "all",
   );
   const [filterCategory, setFilterCategory] = useState("all");
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
@@ -36,6 +46,11 @@ export function useTransactions() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
+
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [newTransaction, setNewTransaction] = useState<NewTransactionForm>(
+    emptyTransactionForm(),
+  );
 
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
@@ -69,7 +84,7 @@ export function useTransactions() {
 
         const params = new URLSearchParams({
           page: currentPage.toString(),
-          limit: "20",
+          limit: "1000",
           search: debouncedSearch,
           type: filterType,
           category: filterCategory,
@@ -87,7 +102,7 @@ export function useTransactions() {
         const meta = payload.meta;
 
         setTransactions((prev) =>
-          reset ? newTransactions : [...prev, ...newTransactions]
+          reset ? newTransactions : [...prev, ...newTransactions],
         );
         setTotal(meta.total);
         setHasMore(newTransactions.length === 20); // If we got full limit, likely more exists
@@ -99,7 +114,7 @@ export function useTransactions() {
         setLoadingMore(false);
       }
     },
-    [debouncedSearch, filterType, filterCategory, dateRange, sortBy]
+    [debouncedSearch, filterType, filterCategory, dateRange, sortBy],
   );
 
   const fetchUser = async () => {
@@ -155,7 +170,7 @@ export function useTransactions() {
       });
       if (res.ok) {
         setTransactions((prev) =>
-          prev.filter((t) => t.id !== deletingTransactionId)
+          prev.filter((t) => t.id !== deletingTransactionId),
         );
         toast.success("Transaction deleted successfully");
         setDeletingTransactionId(null);
@@ -189,7 +204,7 @@ export function useTransactions() {
       if (res.ok) {
         const updated = await res.json();
         setTransactions((prev) =>
-          prev.map((t) => (t.id === updated.id ? updated : t))
+          prev.map((t) => (t.id === updated.id ? updated : t)),
         );
         setEditingTransaction(null);
         toast.success("Transaction updated successfully");
@@ -199,6 +214,41 @@ export function useTransactions() {
       }
     } catch (error) {
       console.error("Error updating transaction:", error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const openAdd = () => {
+    setNewTransaction(emptyTransactionForm());
+    setIsAddOpen(true);
+  };
+
+  const closeAdd = () => {
+    setIsAddOpen(false);
+  };
+
+  const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTransaction),
+      });
+
+      if (res.ok) {
+        const created: Transaction = await res.json();
+        setTransactions((prev) => [created, ...prev]);
+        setTotal((prev) => prev + 1);
+        setIsAddOpen(false);
+        toast.success("Transaction added successfully");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to add transaction");
+      }
+    } catch (error) {
+      console.error("Error creating transaction:", error);
       toast.error("An unexpected error occurred");
     }
   };
@@ -255,6 +305,12 @@ export function useTransactions() {
     sortBy,
     setSortBy,
     categories,
+    isAddOpen,
+    newTransaction,
+    setNewTransaction,
+    openAdd,
+    closeAdd,
+    handleCreate,
     editingTransaction,
     setEditingTransaction,
     deletingTransactionId,

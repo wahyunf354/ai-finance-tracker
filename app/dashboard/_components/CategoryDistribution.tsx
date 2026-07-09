@@ -43,7 +43,8 @@ export function CategoryDistribution({
                     cy="50%"
                     innerRadius={50}
                     outerRadius={70}
-                    paddingAngle={8}
+                    paddingAngle={2}
+                    minAngle={2}
                     dataKey="value"
                     animationBegin={200}
                     animationDuration={1200}
@@ -70,28 +71,42 @@ export function CategoryDistribution({
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-full space-y-3">
-              {categoryData.slice(0, 5).map((item, index) => (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between group cursor-default"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="h-2.5 w-2.5 rounded-full shadow-sm"
-                      style={{
-                        backgroundColor: COLORS[index % COLORS.length],
-                      }}
-                    />
-                    <span className="text-[12px] font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-[100px]">
-                      {item.name}
-                    </span>
+
+            <div className="w-full space-y-3 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
+              {categoryData.map((item, index) => {
+                const total = categoryData.reduce(
+                  (acc, curr) => acc + curr.value,
+                  0
+                );
+                const percentage = ((item.value / total) * 100).toFixed(1);
+
+                return (
+                  <div
+                    key={item.name}
+                    className="flex items-center justify-between group cursor-default"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="h-2.5 w-2.5 rounded-full shadow-sm shrink-0"
+                        style={{
+                          backgroundColor: COLORS[index % COLORS.length],
+                        }}
+                      />
+                      <span className="text-[12px] font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-[120px]">
+                        {item.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-muted-foreground">
+                        {percentage}%
+                      </span>
+                      <span className="text-[12px] font-bold tabular-nums">
+                        {formatRupiah(item.value)}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-[12px] font-bold tabular-nums">
-                    {formatRupiah(item.value)}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ) : (

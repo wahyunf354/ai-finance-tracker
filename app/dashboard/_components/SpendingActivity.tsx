@@ -11,7 +11,7 @@ import {
   Tooltip,
   Area,
 } from "recharts";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, formatCompactNumber } from "@/lib/utils";
 
 import { ChartDataItem } from "@/types";
 
@@ -60,7 +60,7 @@ export function SpendingActivity({ data }: SpendingActivityProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: "#666" }}
-              tickFormatter={(val) => `Rp ${val / 1000}k`}
+              tickFormatter={(val) => formatCompactNumber(val)}
             />
             <Tooltip
               contentStyle={{

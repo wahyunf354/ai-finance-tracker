@@ -1,5 +1,6 @@
 "use client";
 
+import { Transaction } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,7 +37,7 @@ type BudgetStatus = {
 export default function BudgetPage() {
   const { t } = useLanguage();
   const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -59,8 +60,8 @@ export default function BudgetPage() {
 
       if (budgetRes.ok) setBudgets(budgetData);
       if (txRes.ok) setTransactions(txData.data || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    } catch (_error) {
+      console.error("Error fetching data:", _error);
     } finally {
       setLoading(false);
     }
@@ -127,7 +128,7 @@ export default function BudgetPage() {
         await fetchData();
         toast.success(t.budget_page.toasts.generated);
       }
-    } catch (error) {
+    } catch {
       toast.error(t.budget_page.toasts.generate_error);
     } finally {
       setIsSuggesting(false);
@@ -154,26 +155,38 @@ export default function BudgetPage() {
         setEditingCategory("");
         setIsEditMode(false);
       }
-    } catch (error) {
+    } catch {
       toast.error(t.budget_page.toasts.save_error);
     }
   };
 
-  const handleDeleteBudget = async (category: string) => {
-    if (!confirm(t.budget_page.confirm_delete)) return;
+  // Delete Confirmation State
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+
+  // ... (keep existing fetch logic)
+
+  // Calculate Totals
+  const { totalBudget, totalSpent } = useMemo(() => {
+    const tBudget = budgets.reduce((acc, b) => acc + b.amount, 0);
+    const tSpent = budgetStats.reduce((acc, b) => acc + b.spent, 0);
+    return { totalBudget: tBudget, totalSpent: tSpent };
+  }, [budgets, budgetStats]);
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
       const res = await fetch(
-        `/api/budgets?category=${encodeURIComponent(category)}`,
-        {
-          method: "DELETE",
-        }
+        `/api/budgets?category=${encodeURIComponent(deleteTarget)}`,
+        { method: "DELETE" }
       );
       if (res.ok) {
         fetchData();
         toast.success(t.budget_page.toasts.deleted);
       }
-    } catch (error) {
+    } catch {
       toast.error(t.budget_page.toasts.delete_error);
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -213,18 +226,56 @@ export default function BudgetPage() {
         </Button>
       </div>
 
-      <Card className="border-none bg-primary/5">
-        <CardContent className="p-4 flex items-center gap-4">
-          <div className="bg-primary/20 p-3 rounded-full">
-            <Wand2 className="h-6 w-6 text-primary" />
+      {/* Summary Card */}
+      <Card className="border-none bg-gradient-to-br from-primary/10 to-primary/5">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+            <div className="space-y-1">
+              <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
+                Total Budget
+              </span>
+              <div className="text-2xl sm:text-lg font-bold text-primary">
+                {formatRupiah(totalBudget)}
+              </div>
+            </div>
+            <div className="space-y-1 sm:border-x border-primary/10">
+              <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
+                Total Spent
+              </span>
+              <div className="text-2xl sm:text-lg font-bold text-foreground">
+                {formatRupiah(totalSpent)}
+              </div>
+            </div>
+            <div className="space-y-1">
+              <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
+                Remaining
+              </span>
+              <div
+                className={`text-2xl sm:text-lg font-bold ${
+                  totalBudget - totalSpent < 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                }`}
+              >
+                {formatRupiah(Math.max(0, totalBudget - totalSpent))}
+              </div>
+            </div>
           </div>
-          <div className="text-sm text-muted-foreground">
-            {t.budget_page.description}
+          <div className="mt-4 pt-4 border-t border-primary/10">
+            <div className="flex justify-between text-xs mb-1.5 text-muted-foreground">
+              <span>Overall Progress</span>
+              <span>{Math.round((totalSpent / totalBudget) * 100) || 0}%</span>
+            </div>
+            <Progress
+              value={Math.min((totalSpent / totalBudget) * 100, 100)}
+              className="h-2 bg-primary/20 [&>div]:bg-primary"
+            />
           </div>
         </CardContent>
       </Card>
 
       <div className="grid gap-4">
+        {/* ... (Keep Add Button) ... */}
         <div className="flex justify-end">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -233,6 +284,7 @@ export default function BudgetPage() {
               </Button>
             </DialogTrigger>
             <DialogContent>
+              {/* ... (Keep Dialog Content) ... */}
               <DialogHeader>
                 <DialogTitle>{t.budget_page.dialog_title}</DialogTitle>
               </DialogHeader>
@@ -245,7 +297,6 @@ export default function BudgetPage() {
                     onChange={(e) => setEditingCategory(e.target.value)}
                     disabled={isEditMode}
                   />
-                  {/* Ideally select from existing categories */}
                 </div>
                 <div className="space-y-2">
                   <Label>{t.budget_page.amount}</Label>
@@ -264,6 +315,7 @@ export default function BudgetPage() {
           </Dialog>
         </div>
 
+        {/* Loading / Empty States */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-2">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -304,7 +356,7 @@ export default function BudgetPage() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                            onClick={() => handleDeleteBudget(stat.category)}
+                            onClick={() => setDeleteTarget(stat.category)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -350,6 +402,26 @@ export default function BudgetPage() {
           </AnimatePresence>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t.budget_page.confirm_delete}</DialogTitle>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

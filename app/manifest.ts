@@ -6,7 +6,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Finflow",
     description: "Personal finance tracker powered by AI",
     start_url: "/",
+    scope: "/",
     display: "standalone",
+    orientation: "portrait",
     background_color: "#000000",
     theme_color: "#6b21a8", // Purple 800 (Finflow theme)
     icons: [
@@ -19,6 +21,12 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/icon-512.png",
         sizes: "512x512",
         type: "image/png",
+      },
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
