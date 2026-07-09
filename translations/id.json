@@ -116,7 +116,11 @@
     "sort_highest": "Jumlah Tertinggi",
     "sort_lowest": "Jumlah Terendah",
     "load_more": "Muat Lebih Banyak",
-    "loading": "Memuat..."
+    "loading": "Memuat...",
+    "add_transaction": "Tambah Transaksi",
+    "add_title": "Tambah Transaksi",
+    "save": "Simpan",
+    "cancel": "Batal"
   },
   "settings": {
     "title": "Pengaturan",

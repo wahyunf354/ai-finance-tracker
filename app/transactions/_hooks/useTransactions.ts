@@ -1,8 +1,18 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { Transaction, UserProfile } from "@/types";
+import { STANDARD_CATEGORIES } from "@/lib/categories";
+import type { NewTransactionForm } from "../_components/AddTransactionModal";
 import * as ExcelJS from "exceljs";
 import { exportToPDF } from "@/lib/export-pdf";
+
+const emptyTransactionForm = (): NewTransactionForm => ({
+  description: "",
+  amount: "",
+  date: new Date().toISOString().split("T")[0],
+  category: STANDARD_CATEGORIES[0],
+  type: "expense",
+});
 
 // Simple debounce hook implementation if package not available
 function useDebounceValue<T>(value: T, delay: number): T {
@@ -36,6 +46,11 @@ export function useTransactions() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
+
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [newTransaction, setNewTransaction] = useState<NewTransactionForm>(
+    emptyTransactionForm(),
+  );
 
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
@@ -203,6 +218,41 @@ export function useTransactions() {
     }
   };
 
+  const openAdd = () => {
+    setNewTransaction(emptyTransactionForm());
+    setIsAddOpen(true);
+  };
+
+  const closeAdd = () => {
+    setIsAddOpen(false);
+  };
+
+  const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTransaction),
+      });
+
+      if (res.ok) {
+        const created: Transaction = await res.json();
+        setTransactions((prev) => [created, ...prev]);
+        setTotal((prev) => prev + 1);
+        setIsAddOpen(false);
+        toast.success("Transaction added successfully");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to add transaction");
+      }
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
   const exportToExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("Transactions");
@@ -255,6 +305,12 @@ export function useTransactions() {
     sortBy,
     setSortBy,
     categories,
+    isAddOpen,
+    newTransaction,
+    setNewTransaction,
+    openAdd,
+    closeAdd,
+    handleCreate,
     editingTransaction,
     setEditingTransaction,
     deletingTransactionId,
