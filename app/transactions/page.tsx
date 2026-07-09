@@ -89,7 +89,7 @@ export default function TransactionsPage() {
                 "flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 activeTab === id
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -207,7 +207,7 @@ export default function TransactionsPage() {
         size="icon"
         onClick={openAdd}
         aria-label={t.history.add_transaction}
-        className="fixed bottom-24 right-6 z-40 h-14 w-14 rounded-full shadow-lg sm:bottom-8"
+        className="btn-plus fixed bottom-44 right-6 z-40 h-14 w-14 rounded-full shadow-lg md:bottom-8"
       >
         <Plus className="h-6 w-6" />
       </Button>
