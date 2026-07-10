@@ -31,6 +31,13 @@ const mockTransactions = [
   },
 ];
 
+// The hook only fetches when a full date range is provided (the dashboard
+// page always supplies one). Tests must pass a valid range or it never fetches.
+const dateRange = {
+  from: new Date("2020-01-01"),
+  to: new Date("2100-01-01"),
+};
+
 describe("useDashboardData", () => {
   beforeEach(() => {
     (global.fetch as jest.Mock).mockClear();
@@ -42,7 +49,7 @@ describe("useDashboardData", () => {
       json: async () => ({ data: mockTransactions }),
     });
 
-    const { result } = renderHook(() => useDashboardData());
+    const { result } = renderHook(() => useDashboardData(dateRange));
 
     // Initially loading
     expect(result.current.loading).toBe(true);
@@ -72,7 +79,7 @@ describe("useDashboardData", () => {
       json: async () => ({ data: mockTransactions }),
     });
 
-    const { result } = renderHook(() => useDashboardData());
+    const { result } = renderHook(() => useDashboardData(dateRange));
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     // Desired: Food 50000, Transport 20000. Sorted by value desc.
@@ -92,7 +99,7 @@ describe("useDashboardData", () => {
       new Error("Network Error")
     );
 
-    const { result } = renderHook(() => useDashboardData());
+    const { result } = renderHook(() => useDashboardData(dateRange));
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 

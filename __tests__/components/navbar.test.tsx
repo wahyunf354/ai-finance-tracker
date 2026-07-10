@@ -61,6 +61,9 @@ describe("Navbar Component", () => {
     about: {
       title: "About",
     },
+    settings: {
+      title: "Settings",
+    },
   };
 
   beforeEach(() => {
