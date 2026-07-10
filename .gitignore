@@ -49,3 +49,10 @@ next-env.d.ts
 /public/worker-*.js.map
 /public/swe-worker-*.js
 /public/swe-worker-*.js.map
+
+# Playwright E2E
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/e2e/.auth/
