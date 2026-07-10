@@ -9,6 +9,7 @@ export type Transaction = {
   items?: { name: string; quantity: number | string; price: number }[];
   tax?: number;
   discount?: number;
+  source?: string;
 };
 
 export interface ProcessingResponse {

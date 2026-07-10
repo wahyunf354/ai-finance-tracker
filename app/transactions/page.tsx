@@ -13,9 +13,10 @@ import { TransactionTableDesktop } from "./_components/TransactionTableDesktop";
 import { TransactionCards } from "./_components/TransactionCards";
 import { TransactionAnalysis } from "./_components/TransactionAnalysis";
 import { EditModal } from "./_components/EditModal";
+import { AddTransactionModal } from "./_components/AddTransactionModal";
 import { DeleteConfirmModal } from "./_components/DeleteConfirmModal";
 import { useLanguage } from "@/context/LanguageContext";
-import { List, LayoutGrid, BarChart3 } from "lucide-react";
+import { List, LayoutGrid, BarChart3, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TransactionTab = "list" | "cards" | "analysis";
@@ -43,6 +44,12 @@ export default function TransactionsPage() {
     sortBy,
     setSortBy,
     categories,
+    isAddOpen,
+    newTransaction,
+    setNewTransaction,
+    openAdd,
+    closeAdd,
+    handleCreate,
     editingTransaction,
     setEditingTransaction,
     deletingTransactionId,
@@ -82,7 +89,7 @@ export default function TransactionsPage() {
                 "flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 activeTab === id
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -194,6 +201,24 @@ export default function TransactionsPage() {
           )}
         </div>
       </Card>
+
+      <Button
+        type="button"
+        size="icon"
+        onClick={openAdd}
+        aria-label={t.history.add_transaction}
+        className="btn-plus fixed bottom-44 right-6 z-40 h-14 w-14 rounded-full shadow-lg md:bottom-8"
+      >
+        <Plus className="h-6 w-6" />
+      </Button>
+
+      <AddTransactionModal
+        isOpen={isAddOpen}
+        form={newTransaction}
+        onClose={closeAdd}
+        onSubmit={handleCreate}
+        onChange={setNewTransaction}
+      />
 
       <EditModal
         transaction={editingTransaction}
